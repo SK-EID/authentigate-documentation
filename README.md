@@ -32,7 +32,9 @@ content type `application/x-www-form-urlencoded` is sent to OIDC_SERVICE/par wit
 
 | Parameter                       | Required | Value                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                              |
 |---------------------------------|----------|-------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| scope                           | Yes      | Must be 'openid' For age verification case additionally should be included ‘age_over’ or ‘age_under’ strings| Static value required by OIDC core protocol                                                                                                                                                                                                                                                                                                                                              |
+| scope                           | Yes      | Must be 'openid' For age verification case additionally should be included ‘age_over’ or ‘age_under’ strings| A space-separated list of strings defines the scope of the authentication. 
+
+All supported scope values must be explicitly configurable per client. By default, only openid shall be supported for client. An HTTP 400 invalid_scope error is returned if the scope parameter value contains a scope that is not permitted by the client registration.                                                                                                                                                                                                                                                                                |
 | response-type                   | Yes      | Must be 'code'                                                                      | The authorization code flow is used                                                                                                                                                                                                                                                                                                                                                      |
 | client-id                       | Yes      | Relying-party ID                                                                    | A pre-registered relying-party identifier                                                                                                                                                                                                                                                                                                                                                |
 | redirect-uri                    | Yes      | Relying-party callback URL                                                          | A pre-registered relying party callback URL                                                                                                                                                                                                                                                                                                                                              |
@@ -44,6 +46,8 @@ content type `application/x-www-form-urlencoded` is sent to OIDC_SERVICE/par wit
 | sid_confirmation_message        | No       | String with information for users for the SID authentication app                    | Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc).                                                                                                                                               |
 | mid_confirmation_message        | No       | String with information for users for the MID authentication app                    | Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.                                                                                                                                                                                                                                             |
 | mid_confirmation_message_format | No       | Must be one of GSM-7, UCS-2                                                         | Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( €[]^&#124;{}\ ) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž). |
+| age_comparator 		  | No (Yes when scope includes "age_over" or "age_under") | int				  |  Age to do the age_over/age_under comparison against							 |
+
 
 The oidc-service shall validate the authentication request and respond with a URI that the public
 client can use to start authentication:
@@ -54,10 +58,12 @@ Cache-Control: no-cache, no-store
 Content-Type: application/json
     
 {
-   "request_uri": "urn:client:bwc4JK-ESC0w8acc191e-Y1LTC2",
+   "request_uri": "urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5",
    "expires_in": 90
 }
 ````
+Please pay attention that client id and client secret should be passed in Authorization header of /par request in a format that OAuth 2.0 foresees for client secret authorization method.
+According to OAuth 2.0. framework Authorization header must be in the Authorization: Basic encodedString format, where the encodedString is a result of Base64 encoding of OAuth client’s clientID:clientSecret.
 
 Using the returned link, the app can open end-user's browser with the corresponding url.
 
@@ -67,7 +73,7 @@ The app should open the link with an external user agent as recommended by curre
 clients best practices:
 
 ``
-GET /authorize?client_id=EinLKYAAMqPr2Tw &request_uri=urn%3Aclient%3Abwc4JK-ESC0w8acc191e-Y1LTC2
+GET /authorize?client_id=EinLKYAAMqPr2Tw &request_uri=urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5
 ``
 
 After this, the user is redirected to the login service (located at OIDC_SERVICE/login)
@@ -79,7 +85,7 @@ successful authentication session exists. The redirect points user's browser bac
 redirect_uri where the RP shall verify the value of the state parameter.
 
 ``
-HTTP/1.1 302 Found Location: https://client.example.org/callback? code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU
+HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU
 ``
 
 | Parameter    | Required | Value                | Description                                                                                                                 |
