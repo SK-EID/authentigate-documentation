@@ -21,12 +21,13 @@ content type `application/x-www-form-urlencoded` is sent to OIDC_SERVICE/par wit
     'redirect_uri': 'REDIRECT_URI',
     'state': 'STATE',
     'nonce': 'NONCE',
-    'scope': 'openid',
+    'scope': 'openid age_over',
     'code_challenge': 'CODE_CHALLENGE',
     'code_challenge_method': 'S256',
     'sid_confirmation_message': 'FREETEXT',
     'mid_confirmation_message': 'FREETEXT',
-    'mid_confirmation_message_format': 'GSM-7'
+    'mid_confirmation_message_format': 'GSM-7',
+    'age_comparator': '18'
 }
 ```
 
