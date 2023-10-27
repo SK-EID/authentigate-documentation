@@ -7,7 +7,6 @@
 # 2 Client registration
 Each client has to be registered with the following required info:
 
-**TODO BEFORE FINAL RELEASE: Add instruction where to start the registration process / where to send the info.**
 
 | Parameter                 | Description                                                                                        | Info                                   |
 |---------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------|
