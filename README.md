@@ -9,9 +9,9 @@
 Welcome to the documentation for our Attribute Collection service, an innovative solution that leverages the OpenID Connect (OIDC) protocol for seamless authentication and secure attribute sharing transactions. This service is part of our ongoing research efforts, focusing on age verification in a pilot phase.
 
 **Service Goals:**   
-Trusted Claims, Privacy-Preserving: Our primary aim is to provide trusted claims about individuals while safeguarding their privacy. We ensure that no personal data is disclosed, and only the minimum necessary information, as confirmed by the end-user, is shared.
-Simplified Integration: We make it easier for our customers by offering a unified API that supports various authentication methods, such as Smart-ID, Mobile-ID, and future popular eIDs. This simplifies integration, streamlining the user experience.
-Enhanced Security: We prioritize the security of relying parties (RP-s). By adhering to well-known OpenID and IETF standards and protocols, we ensure that your data and transactions are protected and follow best practices in the industry.
+* Trusted Claims, Privacy-Preserving: Our primary aim is to provide trusted claims about individuals while safeguarding their privacy. We ensure that no personal data is disclosed, and only the minimum necessary information, as confirmed by the end-user, is shared.    
+* Simplified Integration: We make it easier for our customers by offering a standard-based unified API that supports various authentication methods, such as Smart-ID, Mobile-ID, and future popular eIDs. This simplifies integration, streamlining the user experience.   
+* Enhanced Security: We prioritize the security of relying parties (RP-s). By adhering to well-known OpenID and IETF standards and protocols, we ensure that your data and transactions are protected and follow best practices in the industry.
 
 This documentation will guide you through the integration, configuration, and use of our age verification service. Whether you're a developer, a relying party, or simply interested in learning more, this documentation is your gateway to harnessing the power of our service. Let's get started on this journey to better age verification and data security.
 ## 1.1 Glossary
