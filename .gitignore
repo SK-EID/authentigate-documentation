@@ -1,0 +1,33 @@
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/target/
+
+etc/docker/*.jar
+/src/main/resources/application.yml
+
+### MacOS ###
+.DS_Store
+
+### VSCode ###
+.vscode/
+dependency_tree
