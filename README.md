@@ -8,10 +8,10 @@
 # 1 Introduction
 Welcome to the documentation for our Attribute Collection service, an innovative solution that leverages the OpenID Connect (OIDC) protocol for seamless authentication and secure attribute sharing transactions. This service is part of our ongoing research efforts, focusing on age verification in a pilot phase.
 
-Service Goals:
-Trusted Claims, Privacy-Preserving: Our primary aim is to provide trusted claims about individuals while safeguarding their privacy. We ensure that no personal data is disclosed, and only the minimum necessary information, as confirmed by the end-user, is shared.
-Simplified Integration: We make it easier for our customers by offering a unified API that supports various authentication methods, such as Smart-ID, Mobile-ID, and future popular eIDs. This simplifies integration, streamlining the user experience.
-Enhanced Security: We prioritize the security of relying parties (RP-s). By adhering to well-known OpenID and IETF standards and protocols, we ensure that your data and transactions are protected and follow best practices in the industry.
+**Service Goals:**   
+* Trusted Claims, Privacy-Preserving: Our primary aim is to provide trusted claims about individuals while safeguarding their privacy. We ensure that no personal data is disclosed, and only the minimum necessary information, as confirmed by the end-user, is shared.    
+* Simplified Integration: We make it easier for our customers by offering a standard-based unified API that supports various authentication methods, such as Smart-ID, Mobile-ID, and future popular eIDs. This simplifies integration, streamlining the user experience.   
+* Enhanced Security: We prioritize the security of relying parties (RP-s). By adhering to well-known OpenID and IETF standards and protocols, we ensure that your data and transactions are protected and follow best practices in the industry.
 
 This documentation will guide you through the integration, configuration, and use of our age verification service. Whether you're a developer, a relying party, or simply interested in learning more, this documentation is your gateway to harnessing the power of our service. Let's get started on this journey to better age verification and data security.
 ## 1.1 Glossary
@@ -19,26 +19,29 @@ This documentation will guide you through the integration, configuration, and us
 * ACS (Attribute Collection Service) - A service developed by SK to offer attribute storage, calculation and sharing functionalities, allowing for the secure and controlled exchange of user information during authentication.
 * RP (Relying Party) - An organization or service that utilizes the SK authentication gateway service to authenticate its users and verify their age.
 * OIDC (OpenID Connect) - A protocol used for central authentication, facilitating secure user verification and attribute sharing.
-  
+
 ## 1.2. References
 
 # 2 Client registration
+> [!IMPORTANT]
+> To register, please [contact us](https://www.skidsolutions.eu/contact/).
+
 Each client has to be registered with the following required info:
 
+| Parameter          | Description                                                                                        | Info                                   |
+|--------------------|----------------------------------------------------------------------------------------------------|----------------------------------------|
+| client-id          | OIDC client ID (Basic authentication user and `client_id` parameter in the authentication request) |                                        |
+| client-secret      | Client secret used for client authentication (Basic authentication)                                |                                        |
+| redirect-uri[]     | A list of allowed callback URI's whitelisted for this client.                                      | 1 or many URIs                         |
+| ip-patterns[]      | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.         | `192.168.12.*`, `192.168.*`, `0.0.0.0` |
+| name               | Client full name, shown in frontend                                                                | Sample RP                              |
+| logo               | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions  | `base64 string`                        |
+| header-color       | Frontend menu bar color, in hex format                                                             | `#ff0000`                              |
+| tab-color          | Frontend tab-bar color (tabs for different auth methods), in hex format                            | `#009639`                              |
+| button-color       | Frontend confirmation button color in input form, in hex format                                    | `#00ff00`                              |
+| allowed-countries  | A list of allowed countries this client requires access to                                         | `EE`, `LV`, `LT`                       |
 
-| Parameter                 | Description                                                                                        | Info                                   |
-|---------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------|
-| client-id                 | OIDC client ID (Basic authentication user and `client_id` parameter in the authentication request) |                                        |
-| client-secret             | Client secret used for client authentication (Basic authentication)                                |                                        |
-| redirect-uri[]            | A list of allowed callback URI's whitelisted for this client.                                      | 1 or many URIs                         |
-| ip-patterns[]             | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.         | `192.168.12.*`, `192.168.*`, `0.0.0.0` |
-| name                      | Client full name, shown in frontend                                                                | Sample RP                              |
-| logo                      | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions  | `base64 string`                        |
-| header-color              | Frontend menu bar color, in hex format                                                             | `#ff0000`                              |
-| tab-color                 | Frontend tab-bar color (tabs for different auth methods), in hex format                            | `#009639`                              |
-| button-color              | Frontend confirmation button color in input form, in hex format                                    | `#00ff00`                              |
-
-Example:
+**Example 1:**
 
 ```
 client-id: sample_rp_1
@@ -51,53 +54,72 @@ tab-color: '#6cd649'
 button-color: '#c621be'
 ip-patterns:
     - 0.0.0.0
+allowed-countries:
+  - 'EE'
 ```
+
 # 3 API specifications
 ## Authentication flow
-### Initial request (/par)
+### Initial request (`/par`)
 
-OIDC requests are initiated via PAR (pushed authentication request). For this, a POST request with
-content type `application/x-www-form-urlencoded` is sent to OIDC_SERVICE/par with the request body:
+OIDC requests are initiated via PAR (pushed authentication request). For this, a `POST` request with
+content type `application/x-www-form-urlencoded` is sent to `OIDC_SERVICE/par` with the request body.
 
-
-```
+**Example 1:** Request person's full name and a verification that the person is over 18 years old:
+```json
 {
-    'response_type': 'code',
-    'client_id': 'CLIENT_ID',
-    'redirect_uri': 'REDIRECT_URI',
-    'state': 'STATE',
-    'nonce': 'NONCE',
-    'scope': 'openid age_over',
-    'code_challenge': 'CODE_CHALLENGE',
-    'code_challenge_method': 'S256',
-    'sid_confirmation_message': 'FREETEXT',
-    'mid_confirmation_message': 'FREETEXT',
-    'mid_confirmation_message_format': 'GSM-7',
-    'age_comparator': '18'
+    "response_type": "code",
+    "client_id": "CLIENT_ID",
+    "redirect_uri": "REDIRECT_URI",
+    "state": "STATE",
+    "nonce": "NONCE",
+    "scope": "openid full_name age_over",
+    "age_comparator": "18",
+    "code_challenge": "CODE_CHALLENGE",
+    "code_challenge_method": "S256",
+    "sid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message_format": "GSM-7"
 }
 ```
 
-| Parameter                       | Required | Value                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                              |
-|---------------------------------|----------|-------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| scope                           | Yes      | Must be 'openid' For age verification case additionally should be included ‘age_over’ or ‘age_under’ strings| A space-separated list of strings defines the scope of the authentication. All supported scope values must be explicitly configurable per client. By default, only openid shall be supported for client. An HTTP 400 invalid_scope error is returned if the scope parameter value contains a scope that is not permitted by the client registration.                                                                                                                                                                                                                                                                                |
-| response-type                   | Yes      | Must be 'code'                                                                      | The authorization code flow is used                                                                                                                                                                                                                                                                                                                                                      |
-| client-id                       | Yes      | Relying-party ID                                                                    | A pre-registered relying-party identifier                                                                                                                                                                                                                                                                                                                                                |
-| redirect-uri                    | Yes      | Relying-party callback URL                                                          | A pre-registered relying party callback URL                                                                                                                                                                                                                                                                                                                                              |
-| state                           | Yes      | unique random string                                                                | RP generated opaque value used to maintain state between the request and the callback. Can be used to mitigate replay and CSRF attacks                                                                                                                                                                                                                                                   |
-| nonce                           | Yes      | unique random string                                                                | RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks                                                                                                                                                                                                                                                       |
-| ui_locales                      | No       | Must be one of et, en, lv (or multiple in order of importance, separated by spaces) | End-User's preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to 'en', if detection fails.                                                               |
-| code-challenge                  | Yes      | Base64 encoded hash of a unique challenge                                           | Base64 encoded hash of a unique challenge (the code_verifier)                                                                                                                                                                                                                                                                                                                            |
-| code-challenge-method           | Yes      | Must be 'S256'                                                                      | The algorithm by which the challenge shall be verified on the server side.                                                                                                                                                                                                                                                                                                               |
-| sid_confirmation_message        | No       | String with information for users for the SID authentication app                    | Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc).                                                                                                                                               |
-| mid_confirmation_message        | No       | String with information for users for the MID authentication app                    | Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.                                                                                                                                                                                                                                             |
-| mid_confirmation_message_format | No       | Must be one of GSM-7, UCS-2                                                         | Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( €[]^&#124;{}\ ) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž). |
-| age_comparator 		  | No (Yes when scope includes "age_over" or "age_under") | int				  |  Age to do the age_over/age_under comparison against							 |		|
+**Example 2:** Request person's given name, family name, and age:
+```json
+{
+    "response_type": "code",
+    "client_id": "CLIENT_ID",
+    "redirect_uri": "REDIRECT_URI",
+    "state": "STATE",
+    "nonce": "NONCE",
+    "scope": "openid given_name family_name age",
+    "code_challenge": "CODE_CHALLENGE",
+    "code_challenge_method": "S256",
+    "sid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message_format": "GSM-7"
+}
+```
 
+| Parameter                       | Required                                               | Value                                                                                                                                                                                                                                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                         |
+|---------------------------------|--------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scope                           | Yes                                                    | `openid` scope is mandatory to include by all clients.<br/>Other available scopes are: `given_name`, `family_name`, `full_name`, `birth_date`, `age`, `age_over`, and `age_under`.<br/><br/>For age verification scopes, `age_over` and `age_under`, the parameter `age_comparator` must be provided | A space-separated list of strings defines the scope of the authentication. All supported scope values must be explicitly configurable per client. By default, only `openid` shall be supported for client.<br/>An HTTP 400 `invalid_scope` error is returned if the scope parameter value contains a scope that is not permitted by the client registration                                         |
+| age_comparator                  | No (Yes when scope includes `age_over` or `age_under`) | int                                                                                                                                                                                                                                                                                                  | Age to do the age_over/age_under comparison                                                                                                                                                                                                                                                                                                                                                         | 
+| response-type                   | Yes                                                    | Value must be `code`                                                                                                                                                                                                                                                                                 | The authorization code flow is                                                                                                                                                                                                                                                                                                                                                                      |
+| client-id                       | Yes                                                    | Relying-party ID                                                                                                                                                                                                                                                                                     | A pre-registered relying-party identifier                                                                                                                                                                                                                                                                                                                                                           |
+| redirect-uri                    | Yes                                                    | Relying-party callback URL                                                                                                                                                                                                                                                                           | A pre-registered relying party callback URL                                                                                                                                                                                                                                                                                                                                                         |
+| state                           | Yes                                                    | unique random string                                                                                                                                                                                                                                                                                 | RP generated opaque value used to maintain state between the request and the callback. Can be used to mitigate replay and CSRF attacks                                                                                                                                                                                                                                                              |
+| nonce                           | Yes                                                    | unique random string                                                                                                                                                                                                                                                                                 | RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks                                                                                                                                                                                                                                                                  |
+| ui_locales                      | No                                                     | Must be one of `et`, `en`, `lv` (or multiple in order of importance, separated by spaces)                                                                                                                                                                                                            | End-User's preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to `en`, if detection fails.                                                                          |
+| code-challenge                  | Yes                                                    | Base64 encoded hash of a unique challenge                                                                                                                                                                                                                                                            | Base64 encoded hash of a unique challenge (the code_verifier)                                                                                                                                                                                                                                                                                                                                       |
+| code-challenge-method           | Yes                                                    | Must be `S256`                                                                                                                                                                                                                                                                                       | The algorithm by which the challenge shall be verified on the server side.                                                                                                                                                                                                                                                                                                                          |
+| sid_confirmation_message        | No                                                     | String with information for users for the SID authentication app                                                                                                                                                                                                                                     | Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc).                                                                                                                                                          |
+| mid_confirmation_message        | No                                                     | String with information for users for the MID authentication app                                                                                                                                                                                                                                     | Free text (max length 40 characters for `GSM-7`, 20 characters for `UCS-2`) value shown to Mobile-ID users before asking authentication PIN.                                                                                                                                                                                                                                                        |
+| mid_confirmation_message_format | No                                                     | Must be one of `GSM-7` or `UCS-2`                                                                                                                                                                                                                                                                    | Specifies which characters and how many can be used in `mid_confirmation_message`.<br/>`GSM-7` allows `mid_confirmation_message` to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( €[]^&#124;{}\ ).<br/>`UCS-2` allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž). |
 
 The oidc-service shall validate the authentication request and respond with a URI that the public
 client can use to start authentication:
 
-````
+```
 HTTP/1.1 201 Created
 Cache-Control: no-cache, no-store
 Content-Type: application/json
@@ -106,22 +128,22 @@ Content-Type: application/json
    "request_uri": "urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5",
    "expires_in": 90
 }
-````
-Please pay attention that client id and client secret should be passed in Authorization header of /par request in a format that OAuth 2.0 foresees for client secret authorization method.
-According to OAuth 2.0. framework Authorization header must be in the Authorization: Basic encodedString format, where the encodedString is a result of Base64 encoding of OAuth client’s clientID:clientSecret.
+```
+Please pay attention that client id and client secret should be passed in `Authorization` header of `/par` request in a format that OAuth 2.0 foresees for client secret authorization method.  
+According to OAuth 2.0 framework, `Authorization` header must be in the `Authorization: Basic encodedString` format, where the `encodedString` is a result of Base64 encoding of OAuth client’s `clientID:clientSecret`.
 
 Using the returned link, the app can open end-user's browser with the corresponding url.
 
-### Authentication redirect (/authorize)
+### Authentication redirect (`/authorize`)
 
 The app should open the link with an external user agent as recommended by current OAuth2 for native
 clients best practices:
 
-``
+```
 GET /authorize?client_id=EinLKYAAMqPr2Tw &request_uri=urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5
-``
+```
 
-After this, the user is redirected to the login service (located at OIDC_SERVICE/login)
+After this, the user is redirected to the login service (located at `OIDC_SERVICE/login`)
 
 ### Response after successful authentication
 
@@ -129,9 +151,9 @@ A standard HTTP 302 authentication response redirect is returned to the end-user
 successful authentication session exists. The redirect points user's browser back to RP's registered
 redirect_uri where the RP shall verify the value of the state parameter.
 
-``
+```
 HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU
-``
+```
 
 | Parameter    | Required | Value                | Description                                                                                                                 |
 |--------------|----------|----------------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -139,7 +161,7 @@ HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4v
 | state        | Yes      | unique random string | RP's state parameter value specified in the Authorization Request                                                           |
 | redirect_uri | Yes      | URL                  | RP's redirect_uri specified in the Authorization Request                                                                    |
 
-### Requesting user info (/token)
+### Requesting user info (`/token`)
 Upon receiving the authorization code from the successful authentication response and having performed all checks required by OIDC core specification (state, csrf), the RP backend service posts a backchannel request to the oidc-service token endpoint:
 
 ```
@@ -156,7 +178,7 @@ grant_type=authorization_code
 
 | Parameter     | Required | Value                        | Description                                                                                                |
 |---------------|----------|------------------------------|------------------------------------------------------------------------------------------------------------|
-| grant_type    | Yes      | Must be 'authorization_code' | Static value required by the OIDC core protocol.                                                           |
+| grant_type    | Yes      | Must be `authorization_code` | Static value required by the OIDC core protocol.                                                           |
 | code          | Yes      | Unique random string         | Authorization code value returned from the OIDC-service                                                    |
 | code_verifier | Yes      | Unique random string         | The sha256 hash that was used as an input value for the code_challenge sent in the authentication request. |
 | redirect_uri  | Yes      | URL                          | Must be identical to the parameter value that was included in the initial Authorization Request            |
@@ -180,7 +202,7 @@ Pragma: no-cache
 | Parameter    | Value                | Description                                      |
 |--------------|----------------------|--------------------------------------------------|
 | access_token | Unique random string | An opaque random string                          |
-| token_type   | 'Bearer'             | Access token type. Will be 'Bearer'              |
+| token_type   | `Bearer`             | Access token type. Will be `Bearer`              |
 | expires_in   | 600                  | Access token expiration time in seconds          |
 | id_token     | JWT                  | A serialized and signed JWT with end-user claims |
 
@@ -197,7 +219,7 @@ The RP must validate the id_token signature and claims as specified in the OIDC 
 | exp                               | Expiration time on or after which the ID Token MUST NOT be accepted for processing.                |
 | nonce                             | String value. Used to associate a Client session with an ID Token, and to mitigate replay attacks. |
 | amr                               | Authentication Methods References.                                                                 |
-	
+
 ## Error tracing
 
 User interface generates a random id on load (example: `95b69c87-aacc-49b3-9577-5a76491792e7`) that is used to trace requests made to services (like getting session information, initializing authentication etc). If a user is experiencing problems and records the incident number shown in the error message, it can be used to help diagnose the problem.
