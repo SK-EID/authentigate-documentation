@@ -24,7 +24,7 @@ This documentation will guide you through the integration, configuration, and us
 
 # 2 Client registration
 > [!IMPORTANT]
-> To initiate the registration process, we kindly request you to get in touch with our **Business Customers** division. You can find their contact information on our [Contact Us](https://www.skidsolutions.eu/contact/) page.
+> To initiate the registration process, we kindly request you to get in touch with our **Sales team**. You can find their contact information on our [Contact Us](https://www.skidsolutions.eu/contact/) page.
 
 Each client has to be registered with the following required info:
 
