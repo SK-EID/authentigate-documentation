@@ -28,19 +28,20 @@ This documentation will guide you through the integration, configuration, and us
 
 Each client has to be registered with the following required info:
 
-| Parameter             | Description                                                                                        | Info                                                |
-|-----------------------|----------------------------------------------------------------------------------------------------|-----------------------------------------------------|
-| client-id             | OIDC client ID (Basic authentication user and `client_id` parameter in the authentication request) |                                                     |
-| client-secret         | Client secret used for client authentication (Basic authentication)                                |                                                     |
-| redirect-uri[]        | A list of allowed callback URI's whitelisted for this client.                                      | 1 or many URIs                                      |
-| sector-identifier-uri | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values.    | Required if multiple `redirect_uris` are registered |
-| ip-patterns[]         | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.         | `192.168.12.*`, `192.168.*`, `0.0.0.0`              |
-| name                  | Client full name, shown in frontend                                                                | Sample RP                                           |
-| logo                  | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions  | `base64 string`                                     |
-| header-color          | Frontend menu bar color, in hex format                                                             | `#ff0000`                                           |
-| tab-color             | Frontend tab-bar color (tabs for different auth methods), in hex format                            | `#009639`                                           |
-| button-color          | Frontend confirmation button color in input form, in hex format                                    | `#00ff00`                                           |
-| allowed-countries[]   | A list of allowed countries this client requires access to                                         | `EE`, `LV`, `LT`                                    |
+| Parameter             | Description                                                                                                              | Info                                                |
+|-----------------------|--------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| client-id             | OIDC client ID (Basic authentication user and `client_id` parameter in the authentication request)                       |                                                     |
+| client-secret         | Client secret used for client authentication (Basic authentication)                                                      |                                                     |
+| redirect-uri[]        | A list of allowed callback URI's whitelisted for this client.                                                            | 1 or many URIs                                      |
+| sector-identifier-uri | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values.                          | Required if multiple `redirect_uris` are registered |
+| ip-patterns[]         | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.                               | `192.168.12.*`, `192.168.*`, `0.0.0.0`              |
+| name                  | Client full name, shown in frontend                                                                                      | Sample RP                                           |
+| logo                  | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions                        | `base64 string`                                     |
+| header-color          | Frontend menu bar color, in hex format                                                                                   | `#ff0000`                                           |
+| tab-color             | Frontend tab-bar color (tabs for different auth methods), in hex format                                                  | `#009639`                                           |
+| button-color          | Frontend confirmation button color in input form, in hex format                                                          | `#00ff00`                                           |
+| allowed-countries[]   | A list of allowed countries this client requires access to                                                               | `EE`, `LV`, `LT`                                    |
+| jwks[]                | Optional. A list of JWK public keys to be used for validation in case 'private_key_jwt' authentication method is chosen. |                                                     |
 
 **Example 1:**
 
@@ -58,6 +59,13 @@ ip-patterns:
     - 0.0.0.0
 allowed-countries:
   - 'EE'
+jwks:
+    - kty: "EC"
+      use: "sig"
+      crv: "P-256"
+      x: "9Yxd2TvwBbgmupZh3bpg3umKihM_FNAk2_uI_-Edv_Q"
+      y: "BOUFuyvWoBZ9-RVSeHJLF-L4I3ORv0xbaM1CKCFJr54"
+      alg: "ES256"
 ```
 
 # 3 API specifications
