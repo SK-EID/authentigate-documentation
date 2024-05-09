@@ -221,13 +221,15 @@ HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4v
 | redirect_uri | Yes      | URL                  | RP's redirect_uri specified in the Authorization Request                                                                    |
 
 ### Requesting user info (`/token`)
-Upon receiving the authorization code from the successful authentication response and having performed all checks required by OIDC core specification (state, csrf), the RP backend service posts a backchannel request to the oidc-service token endpoint:
+Upon receiving the authorization code from the successful authentication response and having performed all checks required by OIDC core specification (state, csrf), the RP backend service posts a backchannel request to the oidc-service token endpoint.
 
+* Using `client_secret_basic` authentication:
 ```
 POST /token HTTP/1.1
 Host: auth.sk.ee
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic c2FtcGxlX2NsaWVudF8xOjNkc8OEMDIrMSwubTExMmxrMjPDtmxrw7ZsazMyMw
+Cookie: SESSION=YTRmZWQyOTQtNWRkMi00NWYyLWE5MTUtOTViNmNjNDYxYTQ0
 
 grant_type=authorization_code
 &code=GaqukjWp4vvzEWHnLW7phLlwkpB0
@@ -235,12 +237,31 @@ grant_type=authorization_code
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcallback
 ```
 
-| Parameter     | Required | Value                        | Description                                                                                                |
-|---------------|----------|------------------------------|------------------------------------------------------------------------------------------------------------|
-| grant_type    | Yes      | Must be `authorization_code` | Static value required by the OIDC core protocol.                                                           |
-| code          | Yes      | Unique random string         | Authorization code value returned from the OIDC-service                                                    |
-| code_verifier | Yes      | Unique random string         | The sha256 hash that was used as an input value for the code_challenge sent in the authentication request. |
-| redirect_uri  | Yes      | URL                          | Must be identical to the parameter value that was included in the initial Authorization Request            |
+or
+
+* Using `private_key_jwt` authentication:
+```
+POST /token HTTP/1.1
+Host: auth.sk.ee
+Content-Type: application/x-www-form-urlencoded
+Cookie: SESSION=YTRmZWQyOTQtNWRkMi00NWYyLWE5MTUtOTViNmNjNDYxYTQ0
+
+grant_type=authorization_code
+&code=GaqukjWp4vvzEWHnLW7phLlwkpB0
+&code_verifier=yJhbGciOiJSUzI1NiIsImtpZ
+&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+&client_assertion=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJqdGkiOiAiY2ZiMDM5NGEtY2JlOS00MGE4LWEyNDQtZmNlM2Y0MTljNmRhIiwKICAic3ViIjogImJhbmsxMjMiLAogICJpc3MiOiAiYmFuazEyMyIsCiAgImF1ZCI6ICJodHRwczovL2F1dGguc2suZWUvdG9rZW4iLAogICJleHAiOiAxNzE0OTM3NjEwLAogICJpYXQiOiAxNzE0MDM3NjEwCn0=.zK6oUoDcxm-9w7hYpI8-IYlJr55k-S0LY0XvKDdBsuz8AJnZ6JEFS3GS_04SNVP02dqHq44ZGUbpRxkkAOJ8Su2zn7iJGaqr_MLchxddQiYYpHdOiKYqIQ-Yn3oleTlHed0ci84Kh7-BEQB_u7nv2-76wOe339OrHZuNeqejmGeQtMG7vzX5PMDF4wLjvrAxTIptTBKBWLGO02RusEI4uAC-4FrMjjbM4Ygc8U_i8BtZ-Is2FptJlpIAqjMTvGQZdEfenNZWzmVTYn9qKJ3ArXPZg5R07vqsx2YpMenXjbBc5TRS2FTVskwWvfTZn9_ygVvwR1wAzfNNfp7XPcQuUg
+&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcallback
+```
+
+| Parameter             | Required | Value                                                                        | Description                                                                                                        |
+|-----------------------|----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| grant_type            | Yes      | Must be `authorization_code`                                                 | Static value required by the OIDC core protocol.                                                                   |
+| code                  | Yes      | Unique random string                                                         | Authorization code value returned from the OIDC-service                                                            |
+| code_verifier         | Yes      | Unique random string                                                         | The sha256 hash that was used as an input value for the code_challenge sent in the authentication request.         |
+| client_assertion_type | No       | If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer' | Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present. |
+| client_assertion      | No       | Valid signed JWT                                                             | Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present. |
+| redirect_uri          | Yes      | URL                                                                          | Must be identical to the parameter value that was included in the initial Authorization Request                    |
 
 The JSON response contains a signed JWT in the field id_token that contains claims about the authenticated end-user: 
 ```
