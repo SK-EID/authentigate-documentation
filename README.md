@@ -34,7 +34,7 @@ Each client has to be registered with the following required info:
 | client-secret         | Client secret used for client authentication (Basic authentication)                                                      |                                                     |
 | redirect-uri[]        | A list of allowed callback URI's whitelisted for this client.                                                            | 1 or many URIs                                      |
 | sector-identifier-uri | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values.                          | Required if multiple `redirect_uris` are registered |
-| ip-patterns[]         | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.                               | `192.168.12.*`, `192.168.*`, `0.0.0.0`              |
+| ip-patterns[]         | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.                               | `192.168.12.*`, `192.168.*`              |
 | name                  | Client full name, shown in frontend                                                                                      | Sample RP                                           |
 | logo                  | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions                        | `base64 string`                                     |
 | header-color          | Frontend menu bar color, in hex format                                                                                   | `#ff0000`                                           |
