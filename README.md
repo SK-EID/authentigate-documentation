@@ -226,7 +226,7 @@ Upon receiving the authorization code from the successful authentication respons
 * Using `client_secret_basic` authentication:
 ```
 POST /token HTTP/1.1
-Host: auth.sk.ee
+Host: oidc.demo.sk.ee
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic c2FtcGxlX2NsaWVudF8xOjNkc8OEMDIrMSwubTExMmxrMjPDtmxrw7ZsazMyMw
 Cookie: SESSION=YTRmZWQyOTQtNWRkMi00NWYyLWE5MTUtOTViNmNjNDYxYTQ0
@@ -242,7 +242,7 @@ or
 * Using `private_key_jwt` authentication:
 ```
 POST /token HTTP/1.1
-Host: auth.sk.ee
+Host: oidc.demo.sk.ee
 Content-Type: application/x-www-form-urlencoded
 Cookie: SESSION=YTRmZWQyOTQtNWRkMi00NWYyLWE5MTUtOTViNmNjNDYxYTQ0
 
