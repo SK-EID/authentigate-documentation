@@ -20,7 +20,17 @@ This documentation will guide you through the integration, configuration, and us
 * Easy Integration: Connecting to the OIDC portal is simplified through a single integration based on the OpenID Connect protocol. The unified API supports various authentication methods, such as Smart-ID, Mobile-ID and another.   
 * GDPR Compliance: Relying Parties can request only the information they need, helping them remain GDPR-compliant.
 
-## 1.3 Supported Attributes
+## 1.3 Supported Authentication Methods
+Authentigate currently supports multiple eID authentication methods in different regions:
+
+Latvia: Smart-ID
+Lithuania: Smart-ID and Mobile-ID
+Estonia: Smart-ID, Mobile-ID, and ID-Card
+
+Authentigate is also planning to expand its range of supported eID solutions in the future to enhance coverage and accessibility across more regions and use cases.
+Using the acr_value parameter, a relying party can specify which countries and authentication methods (e.g., Smart-ID, Mobile-ID, ID-Card) should be offered to the end user during the authentication process. 
+
+## 1.4 Supported Attributes
 Authentigate allows Relying Parties to request various verification attributes such as:
 * User Identification: personal code, given name, family name, full name, birthdate.
 * Age Verification: age, age over, age under.
