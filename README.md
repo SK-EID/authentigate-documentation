@@ -53,32 +53,6 @@ Each client has to be registered with the following required info:
 | allowed-countries[]     | No       | A list of allowed countries this client.                                                                                 |                                                     | `EE`, `LV`, `LT`                         |         |
 | jwks[]                  | No       | A list of JWK public keys to be used for validation in case 'private_key_jwt' authentication method is chosen.           |                                                     |                                          |         |
 
-**Example 1:**
-
-```
-client-id: sample_rp_1
-client-secret: changeme1
-redirect-uris: https://sample-rp.com/callback
-sector-identifier-uri: https://sample-rp.com/redirect_uris.json
-ip-patterns:
-    - 192.168.*
-max-active-par-requests: 100
-response-types: 'code'
-name: Sample RP
-logo: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ5Ni4xNTkgNDk2LjE1OSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDk2LjE1OSA0OTYuMTU5OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBzdHlsZT0iZmlsbDojRDYxRTFFOyIgZD0iTTI0OC4wODMsMC4wMDNDMTExLjA3MSwwLjAwMywwLDExMS4wNjMsMCwyNDguMDg1YzAsMTM3LjAwMSwxMTEuMDcsMjQ4LjA3LDI0OC4wODMsMjQ4LjA3DQoJYzEzNy4wMDYsMCwyNDguMDc2LTExMS4wNjksMjQ4LjA3Ni0yNDguMDdDNDk2LjE1OSwxMTEuMDYyLDM4NS4wODksMC4wMDMsMjQ4LjA4MywwLjAwM3oiLz4NCjxwYXRoIHN0eWxlPSJmaWxsOiNGNEVERUQ7IiBkPSJNMjQ4LjA4MiwzOS4wMDJDMTMyLjYwOSwzOS4wMDIsMzksMTMyLjYwMiwzOSwyNDguMDg0YzAsMTE1LjQ2Myw5My42MDksMjA5LjA3MiwyMDkuMDgyLDIwOS4wNzINCgljMTE1LjQ2OCwwLDIwOS4wNzctOTMuNjA5LDIwOS4wNzctMjA5LjA3MkM0NTcuMTU5LDEzMi42MDIsMzYzLjU1LDM5LjAwMiwyNDguMDgyLDM5LjAwMnoiLz4NCjxnPg0KCTxwYXRoIHN0eWxlPSJmaWxsOiM1QjUxNDc7IiBkPSJNMjk0LjE4MSwxMDIuMDYzYzAuMDA2LTQuMzI0LTMuNTAxLTcuODI5LTcuODI2LTcuODI5Yy00LjMxNywwLTcuODI1LDMuNDk5LTcuODI1LDcuODI5djY3LjgxMQ0KCQljMCw0LjMzLDMuNTA4LDcuODI5LDcuODI1LDcuODI5YzQuMzI1LTAuMDA2LDcuODMyLTMuNTA1LDcuODMyLTcuODI5TDI5NC4xODEsMTAyLjA2M3oiLz4NCgk8cGF0aCBzdHlsZT0iZmlsbDojNUI1MTQ3OyIgZD0iTTM1OS43NTksMTM2Ljg0NmMtMy4wNTItMy4wNTgtOC4wMTItMy4wNTgtMTEuMDcsMGwtNDcuOTQ5LDQ3Ljk1Mg0KCQljLTMuMDU4LDMuMDU4LTMuMDUxLDguMDEzLDAsMTEuMDdjMy4wNjIsMy4wNTIsOC4wMSwzLjA1MiwxMS4wNzEsMGw0Ny45NDgtNDcuOTU4DQoJCUMzNjIuODE2LDE0NC44NTksMzYyLjgyMywxMzkuOTA1LDM1OS43NTksMTM2Ljg0NnoiLz4NCgk8cGF0aCBzdHlsZT0iZmlsbDojNUI1MTQ3OyIgZD0iTTM5My4wNDYsMjAwLjkySDMyNS4yM2MtNC4zMjQsMC03LjgyNiwzLjUxMS03LjgyNiw3LjgyOWMwLDQuMzI0LDMuNTA1LDcuODIyLDcuODI2LDcuODIyaDY3LjgxNg0KCQljNC4zMjEsMCw3LjgyNi0zLjQ5OCw3LjgyNi03LjgyMkM0MDAuODc1LDIwNC40MzEsMzk3LjM2NywyMDAuOTIsMzkzLjA0NiwyMDAuOTJ6Ii8+DQoJPHBhdGggc3R5bGU9ImZpbGw6IzVCNTE0NzsiIGQ9Ik0zMzguNTQ0LDI3Mi4xMzFMMjIzLjAyMSwxNTYuNjE0Yy03LjM1Ny03LjM3LTE5LjMwOS03LjM1Ny0yNi42NiwwLjAwNw0KCQljLTUuOTk1LDUuOTkyLTcuMTA2LDE1LjAxMi0zLjM0NiwyMi4xM2wtNjQuNTcxLDEyNy43OTdjLTAuMTUxLDAuMTUtMC4yODUsMC4zMTMtMC40MjUsMC40N2MtMC4xNTksMC4xNDItMC4zMjIsMC4yNzYtMC40NzQsMC40MjgNCgkJbC0yOC45NjcsMjguOTY2Yy00LjM4NSw0LjM5Mi00LjM4NSwxMS41MDUsMCwxNS44OWw0Ni4zMzQsNDYuMzM3YzQuMzg1LDQuMzc5LDExLjUwMSw0LjM3OSwxNS44ODcsMGwyOC45NjYtMjguOTcyDQoJCWMwLjE0NC0wLjE0NCwwLjI2OS0wLjI5NywwLjQwMy0wLjQ0NWMwLjE2Ny0wLjE0OCwwLjMzNy0wLjI4OSwwLjQ5Ni0wLjQ0OGw4Ljc3OC00LjQzNmMyLjQyMSw0LjAzNiw1LjM2Myw3Ljg0NCw4Ljg0LDExLjMyMw0KCQljMjIuOTA4LDIyLjkxMiw2MC4wNTIsMjIuOTEyLDgyLjk2LDBjMTcuMzI5LTE3LjMzMiwyMS41MzktNDIuODAxLDEyLjY1LTY0LjA5OGwxNS45MDMtOC4wMzYNCgkJYzYuNDIyLDEuOTIxLDEzLjY2OCwwLjM1MywxOC43NS00LjcyM0MzNDUuOTA2LDI5MS40NTMsMzQ1LjkwNiwyNzkuNDk2LDMzOC41NDQsMjcyLjEzMXogTTI3NC42NDUsMzU5LjA2Nw0KCQljLTEzLjc0MywxMy43NDMtMzYuMDI0LDEzLjc1LTQ5Ljc3NCwwYy0xLjY2OS0xLjY2OC0zLjEzMS0zLjQ2NS00LjM5NS01LjM1N2w2Mi4zNzctMzEuNTE3DQoJCUMyODcuMzUxLDMzNC42MzIsMjg0LjYyLDM0OS4wOTcsMjc0LjY0NSwzNTkuMDY3eiIvPg0KPC9nPg0KPHBhdGggc3R5bGU9ImZpbGw6I0Q2MUUxRTsiIGQ9Ik04NS44NTEsNjAuMzk0Yy05LjA4Niw3Ljg2LTE3LjU5NiwxNi4zNy0yNS40NTcsMjUuNDU2bDM0OS45MTQsMzQ5LjkxNA0KCWM5LjA4Ni03Ljg2MSwxNy41OTYtMTYuMzcsMjUuNDU2LTI1LjQ1Nkw4NS44NTEsNjAuMzk0eiIvPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo='
-background-color: '#f5f5f5'
-scope: 'openid'
-allowed-countries:
-  - 'EE'
-jwks:
-    - kty: "EC"
-      use: "sig"
-      crv: "P-256"
-      x: "9Yxd2TvwBbgmupZh3bpg3umKihM_FNAk2_uI_-Edv_Q"
-      y: "BOUFuyvWoBZ9-RVSeHJLF-L4I3ORv0xbaM1CKCFJr54"
-      alg: "ES256"
-```
-
 # 3 API specifications
 ## Authentication flow
 
