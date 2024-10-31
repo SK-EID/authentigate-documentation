@@ -33,16 +33,14 @@ Each client has to be registered with the following required info:
 
 | Parameter               | Required | Description                                                                                                              | Info                                                | Example                                  | Default |
 |-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|------------------------------------------|---------|
-| client-id               | Yes      | OIDC client ID (Basic authentication user and `client_id` parameter in the authentication request).                      |                                                     | `demo-id`                                |         |
-| client-secret           | Yes      | Client secret used for client authentication (Basic authentication).                                                     |                                                     | `changeme`                               |         |
 | redirect-uri[]          | Yes      | A list of allowed callback URIs whitelisted for this client.                                                             | 1 or many URIs                                      | https://sample-rp.ee/callback            |         |
 | sector-identifier-uri   | No       | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values.                          | Required if multiple `redirect_uris` are registered | https://sample-rp.ee/redirecti_uris.json |         |
 | ip-patterns[]           | Yes      | A list of allowed IP patterns allowed for this client to access /token and /par endpoints.                               |                                                     | `192.168.12.*`, `192.168.*`              |         |
 | max-active-par-requests | No       | Maximum amount of active PAR requests in a minute.                                                                       | 0 allows no PAR requests                            | 0, 10                                    | 100     |
 | response-types[]        | No       | Defines a list of allowed OAuth2/OIDC response types for the specific client.                                            | Defaults to `code`                                  | `code`                                   | `code`  |
 | name                    | Yes      | Client full name, shown in frontend.                                                                                     | Sample RP                                           |                                          |         |
-| logo                    | Yes      | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions.                       | base64 string                                       |                                          |         |
-| background-color        | Yes      | Frontend background color, in hex format.                                                                                |                                                     | `#ff0000`                                |         |
+| logo                    | No       | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions.                       | base64 string                                       |                                          |         |
+| background-color        | No       | Frontend background color, in hex format.                                                                                |                                                     | `#ff0000`                                |         |
 | scope                   | No       | A list of allowed scopes for this client.                                                                                | If not specified, then all scopes are allowed       | `openid`, `age_under`                    |         |
 | allowed-countries[]     | Yes      | A list of allowed countries this client.                                                                                 |                                                     | `EE`, `LV`, `LT`                         |         |
 | jwks[]                  | No       | A list of JWK public keys to be used for validation in case 'private_key_jwt' authentication method is chosen.           |                                                     |                                          |         |
@@ -76,9 +74,9 @@ jwks:
 # 3 API specifications
 ## Authentication flow
 
-The AUTH-GW service supports two endpoints for initiating authentication:
+The Authentigate service supports two endpoints for initiating authentication:
 * Authorization endpoint (/authorize), using POST or GET request after which the user is redirected to login service at OIDC_SERVICE/login.
-* Pushed Authentication Request, PAR (/par) where AUTH-GW service validates the POST request and responds with a URI for starting authentication.
+* Pushed Authentication Request, PAR (/par) where Authentigate service validates the POST request and responds with a URI for starting authentication.
 
 ### Authentication flow using PAR
 #### Initial request (`/par`)
