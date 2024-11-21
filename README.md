@@ -1,7 +1,9 @@
 ## Table of Contents
 * [1 Introduction](#1-introduction)
   * [1.1 Glossary](#11-glossary)
-  * [1.2. References](#12-references)
+  * [1.2. Key Benefits](#12-key-benefits)
+  * [1.3. Supported Authentication Methods](#13-supported-authentication-methods)
+  * [1.4. Supported Attributes](#14-supported-attributes)
 * [2 Client registration](#2-client-registration)
 * [3 API specifications](#3-api-specifications)
 
