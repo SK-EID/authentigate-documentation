@@ -113,12 +113,12 @@ Authentication Request parameters:
 
 | Scope claim | Description |
 |-|-|
-| `https://eidas.europa.eu/attributes/naturalperson/FamilyName` | Family name |
-| `https://eidas.europa.eu/attributes/naturalperson/FirstName` | First name |
-| `https://eidas.europa.eu/attributes/naturalperson/DateofBirth` | Date of birth|
+| `family_name` | Family name |
+| `given_name` | First name |
+| `name` | Full name |
+| `birthdate` | Date of birth |
 |	`https://id.authentigate.eu/claims/personal_code` | Personal identification code |
 | `https://id.authentigate.eu/claims/eid_issuing_country` | Country code that has issued the personal identification code|
-| `https://id.authentigate.eu/claims/name` | Full name|
 | `https://id.authentigate.eu/claims/age` | Actual age |
 | `https://id.authentigate.eu/claims/age_under` | Verification of end-user being under certain age - if requested in scope, the parameter `age_comparator` must be provided in request |
 | `https://id.authentigate.eu/claims/age_over` |  Verification of end-user being over certain age - if requested in scope, the parameter `age_comparator` must be provided in request |
