@@ -17,7 +17,7 @@
     * [3.4.2 Successful Authentication Response](#342-successful-authentication-response)
     * [3.4.3 Token Request (/token)](#343-token-request-token)
     * [3.4.4 Token Request Response](#344-token-request-response)
-  * [3.5 Error Tracing: Summary](#35-error-tracing-summary)
+  * [3.5 Error Tracing](#35-error-tracing)
 
 # Glossary
 * Attribute - Any piece of information related to a person that can be optionally shared during an OIDC authentication transaction, providing additional user details. 
@@ -87,8 +87,9 @@ The Authentigate service supports two endpoints for initiating authentication:
 
 ## 3.2 Authentication Request Parameters
 
-Regardless of authentication flow, the Authentication Request MUST include all required parameters. Including non-required parameters is optional. 
-Authentigate supports both signed and unsigned Authentication Requests.
+Regardless of authentication flow, the Authentication Request MUST include all required parameters (per parameter, this may vary depending on the flow used - this is highlighted in the table below).
+Including non-required parameters is optional. 
+Authentigate supports both signed and unsigned Authentication Requests. For passing request parameters as JWT, `request` parameter must be used (see Section [3.2.1](#321-signed-authentication-request)).
 
 Authentication Request parameters:
 
@@ -124,8 +125,16 @@ Authentication Request parameters:
 | `https://id.authentigate.eu/claims/age_over` |  Verification of end-user being over certain age - if requested in scope, the parameter `age_comparator` must be provided in request |
 
 ### 3.2.1 Signed Authentication Request
-Request parameters can be passed also as JWTs. 
-In case of JWT, the request parameter `request` MUST be used - this parameter represents the request as a JWT whose claims are the request parameters.
+
+Request parameters can be passed also as JWTs by using the `request` parameter. 
+This parameter represents the request claims as JWT (Request Object) whose claims are the request parameters.
+If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail.
+Note that `response_type`, `client_id` and `scope` MUST be included in the request root level. These MAY also be included in JWT - in that case the values MUST match.
+On root level, the `scope` parameter MUST contain the `openid` scope value.
+
+Supported cryptographies in signed JWT: RS256, RSA using SHA-256.
+
+Authorization server validates JWT signature and payload fields on the JWT according to OpenID Connect specifications.
 Please note that using `request_uri` parameter is not supported!
 
 ## 3.3 Authentication Flow Using PAR
@@ -304,8 +313,23 @@ Authorization server validates the Token request as described in OpenID Connect 
 
 If token request is invalid, authorization server constructs the error response with HTTP response code 400.
 
+*Token error response example:*
+```
+  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  Cache-Control: no-store
+  Pragma: no-cache
+
+  {
+   "error": "invalid_grant",
+   "error_description": "The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
+  }
+```
+
 If token request validation is successful, authorization server returns a an application/json media type response that includes ID token and access token.
 The ID token is a signed JWT that contains token claims, including the requested attributes of authenticated end-user. 
+
+On authorization server side, the session expires in 60 seconds.
 
 Token response parameters:
 
@@ -317,7 +341,7 @@ Token response parameters:
 | id_token     | JWT                  | A serialized and signed JWT, including end-user claims requested in scope |
 | token_type   | `Bearer`             | Access token type           |
 
-*Token response example:*
+*Token success response example:*
 ```
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -359,35 +383,11 @@ Decoded ID-token claims:
 | jti              | Yes | A unique identifier for the token, which can be used to prevent reuse of the token |
 
 
-### 3.5 Error Tracing: Summary
+### 3.5 Error Tracing
 
-**PAR validation errors**
+**/par endpoint**
 
-| HTTP status code | Error code                | Description                                                                                                                     | Parameter causing the error     |
-|------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| 400              | invalid_request           | Missing scope parameter                                                                                                         | scope                           |
-| 400              | invalid_request           | The scope must include an openid value                                                                                          | scope                           |
-| 400              | invalid_request           | Missing response_type parameter                                                                                                 | response_type                   | 
-| 400              | invalid_request           | Unsupported response_type parameter: Unsupported OpenID Connect response type value: invalid_type                               | response_type                   |
-| 400              | invalid_request           | Missing client_id parameter                                                                                                     | client_id                       |
-| 400              | invalid_request           | Missing redirect_uri parameter                                                                                                  | redirect_uri                    |
-| 400              | invalid_request           | Missing state parameter                                                                                                         | state                           |
-| 400              | invalid_request           | Missing nonce parameter                                                                                                         | nonce                           |
-| 400              | invalid_request           | Invalid acr values: <list of invalid values>. Supported values are: <list of supported values>"                                 | acr_values                      |
-| 400              | invalid_request           | Invalid acr_values provided. Client: <client_id> is not allowed to use acr [<invalid acr value>]                                | acr_values                      |
-| 400              | invalid_request           | Missing code_challenge parameter                                                                                                | code_challenge                  |
-| 400              | invalid_request           | Missing code_challenge_method parameter                                                                                         | code_challenge_method           |
-| 400              | invalid_request           | Parameter value for code_challenge_method is not supported. Supported values are: S256                                          | code_challenge_method           |
-| 400              | invalid_request           | SID confirmation message too long                                                                                               | sid_confirmation_message        |    
-| 400              | invalid_request           | MID confirmation message too long                                                                                               | mid_confirmation_message        | 
-| 400              | invalid_request           | Missing mid_confirmation_message_format parameter                                                                               | mid_confirmation_message_format |
-| 400              | invalid_request           | mid_confirmation_message_format must be one of: GSM-7, UCS-2                                                                    | mid_confirmation_message_format |
-| 400              | invalid_request           | Missing age_comparator parameter when using age_over or age_under scope                                                         | age_comparator                  |
-| 400              | invalid_scope             | The requested scope is invalid. Client: [<client_id>] is not allowed to request scope value(s): [<scope values in the request>] | scope                           |
-| 400              | unsupported_response_type | The authorization server does not support obtaining an authorization code using this method                                     | response_type                   |
-| 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method)    | client_id                       |
-
-**PAR response errors**
+*/par response errors*
 
 | HTTP status code | Error code        | Description                                                                                                |
 |------------------|-------------------|------------------------------------------------------------------------------------------------------------|
@@ -397,9 +397,157 @@ Decoded ID-token claims:
 | 429              | too_many_requests | Too many pending PAR requests                                                                              |
 | 500              | server_error      | The authorization server encountered an unexpected condition that prevented it from fulfilling the request |
 
-**Authorize endpoint response errors**
+*/par - request validation errors*
+
+| HTTP status code | Error code                | Description                                                                                                                     | Parameter causing the error     |
+|------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 400              | invalid_scope             | The requested scope is invalid. Client: [%s] is not allowed to request scope value(s): %s                                       | scope                           |
+| 400              | unsupported_response_type | The authorization server does not support obtaining an authorization code using this method.                                    | response_type                   |
+| 400              | invalid_request           | Missing client_id parameter                                                                                                     | client_id                       |
+| 400              | invalid request           | authorization request not found for provided uri                                                                                |                                 |
+| 400              | invalid request           | Missing state parameter                                                                                                         | state                           |
+| 400              | invalid request           | SID confirmation message too long                                                                                               | sid_confirmation_message        |
+| 400              | invalid request           | MID confirmation message too long                                                                                               | mid_confirmation_message        |
+| 400              | invalid request           | Missing mid_confirmation_message_format parameter                                                                               | mid_confirmation_message_format |
+| 400              | invalid request           | mid_confirmation_message_format must be one of: GSM-7, UCS-2                                                                    | mid_confirmation_message_format |
+| 400              | invalid request           | Missing age_comparator parameter when using age_over or age_under scope                                                         | age_comparator                  |
+| 400              | invalid request           | Missing code_challenge parameter                                                                                                | code_challenge                  |
+| 400              | invalid request           | Parameter value for code_challenge_method is not supported. Supported values are: %s                                            | code_challenge_method           |
+| 400              | invalid request           | Missing code_challenge_method parameter                                                                                         | code_challenge_method           |
+| 400              | invalid request           | Invalid redirect_uri.                                                                                                           | redirect_uri                    |
+| 400              | invalid request           | Invalid acr_values provided. Client: [%s] is not allowed to use acr [%s]                                                        | acr_values                      |
+| 400              | invalid request           | Invalid acr values: %s. Supported values are: %s                                                                                | acr_values                      |
+| 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |                                 |
+
+
+**/authorize endpoint**
+
+*/authorize response errors*
 
 | HTTP status code  | Error code        | Description                                                      |
 |-------------------|-------------------|------------------------------------------------------------------|
 | 400               | invalid_request   | Request_uri invalid or expired                                   |
 | 400               | user_cancel       | User canceled authentication                                     |
+
+
+*/authorize - standard flow*
+
+| HTTP status code | Error code                | Description                                                                                                                     | Parameter causing the error     |
+|------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 400              | invalid_scope             | The requested scope is invalid. Client: [%s] is not allowed to request scope value(s): %s                                       | scope                           |
+| 400              | unsupported_response_type | The authorization server does not support obtaining an authorization code using this method.                                    | response_type                   |
+| 400              | invalid_request           | Missing client_id parameter                                                                                                     | client_id                       |
+| 400              | invalid_request           | Missing required parameters - request_uri or %s                                                                                 | request_uri                     |
+| 400              | invalid_request           | Missing state parameter                                                                                                         | state                           |
+| 400              | invalid_request           | Parameter value for code_challenge_method is not supported. Supported values are: %s                                            | code_challenge_method           |
+| 400              | invalid_request           | SID confirmation message too long                                                                                               | sid_confirmation_message        |
+| 400              | invalid_request           | Missing mid_confirmation_message_format parameter                                                                               | mid_confirmation_message_format |
+| 400              | invalid_request           | mid_confirmation_message_format must be one of: GSM-7, UCS-2                                                                    | mid_confirmation_message_format |
+| 400              | invalid_request           | MID confirmation message too long                                                                                               | mid_confirmation_message        |
+| 400              | invalid_request           | Missing age_comparator parameter when using age_over or age_under scope                                                         | age_comparator                  |
+| 400              | invalid_request           | Invalid acr values: [%s]. Supported values are: [%s]                                                                            | acr_values                      | 
+| 400              | invalid_request           | Missing code_challenge parameter                                                                                                | code_challenge                  |
+| 400              | invalid_request           | Missing code_challenge_method parameter                                                                                         | code_challenge_method           |
+| 400              | invalid_request           | Invalid redirect_uri.                                                                                                           | redirect_uri                    |
+| 400              | invalid_request           | Invalid acr_values provided. Client: [%s] is not allowed to use acr [%s]                                                        | acr_values                      |
+| 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |                                 |
+
+*/authorize - JWT flow*
+
+| HTTP status code | Error code                | Description                                                                                                                     | Parameter causing the error     |
+|------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 400              | invalid_scope             | The requested scope is invalid. Client: [<client_id>] is not allowed to request scope value(s): [<scope values in the request>] | scope                           |
+| 400              | unsupported_response_type | The authorization server does not support obtaining an authorization code using this method                                     | response_type                   |
+| 400              | invalid_request           | Missing client_id parameter                                                                                                     | client_id                       |
+| 400              | invalid_request           | Missing scope parameter                                                                                                         | scope                           |
+| 400              | invalid_request           | The scope must include an openid value                                                                                          | scope                           |
+| 400              | invalid_request           | Invalid redirect_uri.                                                                                                           | redirect_uri                    |
+| 400              | invalid_request           | Missing response_type parameter                                                                                                 | response_type                   | 
+| 400              | invalid_request           | Unsupported response_type parameter: Unsupported OpenID Connect response type value: invalid_type                               | response_type                   |
+| 400              | invalid_request           | Missing client_id parameter                                                                                                     | client_id                       |
+| 400              | invalid_request           | Missing redirect_uri parameter                                                                                                  | redirect_uri                    |
+| 400              | invalid_request           | Missing state parameter                                                                                                         | state                           |
+| 400              | invalid_request           | Missing nonce parameter                                                                                                         | nonce                           |
+| 400              | invalid_request           | Invalid acr values: [%s]. Supported values are: [%s]                                                                            | acr_values                      | 
+| 400              | invalid_request           | Invalid acr_values provided. Client: <client_id> is not allowed to use acr [<invalid acr value>]                                | acr_values                      |
+| 400              | invalid_request           | Missing code_challenge parameter                                                                                                | code_challenge                  |
+| 400              | invalid_request           | Missing code_challenge_method parameter                                                                                         | code_challenge_method           |
+| 400              | invalid_request           | Parameter value for code_challenge_method is not supported. Supported values are: [%s]                                          | code_challenge_method           |
+| 400              | invalid_request           | SID confirmation message too long                                                                                               | sid_confirmation_message        |    
+| 400              | invalid_request           | MID confirmation message too long                                                                                               | mid_confirmation_message        | 
+| 400              | invalid_request           | Missing mid_confirmation_message_format parameter                                                                               | mid_confirmation_message_format |
+| 400              | invalid_request           | mid_confirmation_message_format must be one of: GSM-7, UCS-2                                                                    | mid_confirmation_message_format |
+| 400              | invalid_request           | Missing age_comparator parameter when using age_over or age_under scope                                                         | age_comparator                  |
+| 400              | invalid_request           | Missing required parameters - [%s]                                                                                              |                                 |
+| 400              | invalid_request           | Invalid signed request JWT                                                                                                      |                                 |  
+| 400              | invalid_request           | Failed to extract claims from JWT                                                                                               |                                 |
+| 400              | invalid_request           | Invalid 'iss' value.                                                                                                            |                                 |
+| 400              | invalid_request           | Signed request 'iss' does not match provided client_id.                                                                         |                                 |
+| 400              | invalid_request           | Invalid client assertion.                                                                                                       |                                 |
+| 400              | invalid_request           | Invalid 'jti' value.                                                                                                            |                                 |
+| 400              | invalid_request           | Invalid 'exp' value.                                                                                                            |                                 |
+| 400              | invalid_request           | Invalid 'iat' value.                                                                                                            |                                 |
+| 400              | invalid_request           | Invalid 'aud' for request object (none provided).                                                                               |                                 |
+| 400              | invalid_request           | Invalid 'aud' for request object (must match OP issuer).                                                                        |                                 |
+| 400              | invalid_request           | Invalid 'sub' value: must match client_id                                                                                       |                                 |
+| 400              | invalid_request           | Parameter 'request' is not allowed inside signed 'request' JWT parameter.                                                       |                                 |
+| 400              | invalid_request           | Parameter 'client_id' included in signed 'request' JWT parameter does not match the one provided in request.                    |                                 |
+| 400              | invalid_request           | Parameter 'response_type' included in signed 'request' JWT parameter does not match the one provided in request.                |                                 |
+| 400              | invalid_request           | Parameter 'scope' included in signed 'request' JWT parameter does not match the one provided in request.                        |                                 |
+| 400              | invalid_request           | Failed to build request from AuthorizeRequest                                                                                   |                                 |
+| 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |                                 |
+  
+
+**/token endpoint**
+  
+
+*/token - JWT flow*  
+  
+| HTTP status code | Error code             | Description                                                                                                                                                                                                                                                          |
+|------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| 400              | invalid_request        | Required Body [tokenRequest] not specified                                                                                                                                                                                                                           |
+| 400              | invalid_request        | 'grant’ must not be blank                                                                                                                                                                                                                                            |
+| 400              | invalid_request        | 'code’ must not be blank                                                                                                                                                                                                                                             |
+| 400              | invalid_request        | Invalid client assertion type.                                                                                                                                                                                                                                       |
+| 400              | invalid_request        | 'redirectUri’ must not be null                                                                                                                                                                                                                                       |
+| 400              | invalid_request        | Missing 'client_assertion’ parameter.                                                                                                                                                                                                                                | 
+| 400              | invalid_request        | Missing 'client_assertion_type' parameter.                                                                                                                                                                                                                           | 
+| 400              | invalid_request        | Session is expired.                                                                                                                                                                                                                                                  |
+| 400              | invalid_request        | Missing code_verifier parameter                                                                                                                                                                                                                                      |
+| 400              | invalid_request        | No code_challenge parameter was provided previously                                                                                                                                                                                                                  |
+| 400              | invalid_request        | authorization request not found for provided uri                                                                                                                                                                                                                     |
+| 400              | invalid_request        | The request is missing a required parameter, includes an unsupported parameter value (other than grant type),<br/>repeats a parameter, includes multiple credentials, utilizes more than one mechanism for authenticating the client,<br/>or is otherwise malformed. |
+| 400              | invalid_request        | Invalid client assertion.                                                                                                                                                                                                                                            |
+| 400              | invalid_request        | Invalid 'iss' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_request        | Invalid 'sub' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_request        | Invalid 'jti' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_request        | Invalid 'aud' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_request        | Invalid 'exp' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_request        | Invalid 'iat' value.                                                                                                                                                                                                                                                 |
+| 400              | invalid_grant          | The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.                                                                                                 |
+| 400              | unsupported_grant_type | The authorization grant type is not supported by the authorization server.                                                                                                                                                                                           | 
+| 401              | invalid_client         | Authenticated client id (%s) and session client value (%s) do not match                                                                                                                                                                                              |
+| 401              | invalid_client         | Authenticated client id (%s) and authentication request client value (%s) do not match                                                                                                                                                                               |
+| 401              | invalid_client         | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).                                                                                                                                        |
+
+
+*/token - basic authentication flow*
+  
+| HTTP status code | Error code             | Description                                                                                                                                                                                                                                                          |
+|------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| 400              | invalid_request        | Required Body [tokenRequest] not specified                                                                                                                                                                                                                           |
+| 400              | invalid_request        | 'grant’ must not be blank                                                                                                                                                                                                                                            |
+| 400              | invalid_request        | 'code’ must not be blank                                                                                                                                                                                                                                             |
+| 400              | invalid_request        | Invalid client assertion type.                                                                                                                                                                                                                                       |
+| 400              | invalid_request        | 'redirectUri’ must not be null                                                                                                                                                                                                                                       |
+| 400              | invalid_request        | Missing 'client_assertion’ parameter.                                                                                                                                                                                                                                | 
+| 400              | invalid_request        | Missing 'client_assertion_type' parameter.                                                                                                                                                                                                                           | 
+| 400              | invalid_request        | Session is expired.                                                                                                                                                                                                                                                  |
+| 400              | invalid_request        | Missing code_verifier parameter                                                                                                                                                                                                                                      |
+| 400              | invalid_request        | No code_challenge parameter was provided previously                                                                                                                                                                                                                  |
+| 400              | invalid_request        | authorization request not found for provided uri                                                                                                                                                                                                                     |
+| 400              | invalid_request        | The request is missing a required parameter, includes an unsupported parameter value (other than grant type),<br/>repeats a parameter, includes multiple credentials, utilizes more than one mechanism for authenticating the client,<br/>or is otherwise malformed. |
+| 400              | invalid_grant          | The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.                                                                                                 |
+| 400              | unsupported_grant_type | The authorization grant type is not supported by the authorization server.                                                                                                                                                                                           | 
+| 401              | invalid_client         | Authenticated client id (%s) and session client value (%s) do not match                                                                                                                                                                                              |
+| 401              | invalid_client         | Authenticated client id (%s) and authentication request client value (%s) do not match                                                                                                                                                                               |
