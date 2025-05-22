@@ -117,8 +117,8 @@ Authentication Request parameters:
 |-|-|
 | `family_name` | Family name |
 | `given_name` | First name |
-| `name` | Full name |
 | `birthdate` | Date of birth |
+| `https://id.authentigate.eu/claims/name` | Full name |
 |	`https://id.authentigate.eu/claims/personal_code` | Personal identification code |
 | `https://id.authentigate.eu/claims/eid_issuing_country` | Country code that has issued the personal identification code|
 | `https://id.authentigate.eu/claims/age` | Actual age |
