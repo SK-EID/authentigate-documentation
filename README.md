@@ -284,6 +284,9 @@ Successful Response parameters:
 ```
 HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU
 ```
+
+Unsuccessful response includes error, error description and `state` parameter value (must match with the value in request).
+
 *Unsuccessful response example:*
 ```
 HTTP/1.1 302 Found
