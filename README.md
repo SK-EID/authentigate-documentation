@@ -14,10 +14,10 @@
     * [3.3.2 Authentication Redirect (/authorize)](#332-authentication-redirect-authorize)
   * [3.4 Authentication Flow Starting with Authorization Endpoint](#34-authentication-flow-starting-with-authorization-endpoint)
     * [3.4.1 Initial Authentication Request (/authorize)](#341-initial-authentication-request-authorize)
-    * [3.4.2 Successful Authentication Response](#342-successful-authentication-response)
-    * [3.4.3 Token Request (/token)](#343-token-request-token)
-    * [3.4.4 Token Request Response](#344-token-request-response)
-  * [3.5 Error Tracing](#35-error-tracing)
+    * [3.4.2 Authentication Response](#342-authentication-response)
+  * [3.5 Token Request (/token)](#35-token-request-token)
+    * [3.5.1 Token Request Response](#351-token-request-response)
+  * [3.6 Error Tracing](#35-error-tracing)
 
 # Glossary
 * Attribute - Any piece of information related to a person that can be optionally shared during an OIDC authentication transaction, providing additional user details. 
@@ -109,6 +109,7 @@ Authentication Request parameters:
 | mid_confirmation_message  | No | String with information for users for the MID authentication app | Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN. |
 | mid_confirmation_message_format | No | Must be one of GSM-7, UCS-2  | Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( €[]^&#124;{}\ ) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž). | 
 | acr_values     | No | Space separated string containing one or more of the following values: `http://eidas.europa.eu/LoA/high`, `http://eidas.europa.eu/LoA/substantial`, `mid`, `mid_ee`, `mid_lt`, `sid`, `sid_ee`, `sid_lv`, `sid_lt`, `idcard`, `idcard_ee` | Optional value specifying authentication methods to be usable by the end-user.<br/><br/>Order of provided values affects the presentation of authentication options to the end-user. Acr values that appear earlier will be prioritized. Example order:<br/><br/> `mid_lt mid_ee sid_lv sid_lt sid_ee` - LT (MID, SID), EE (SID, MID), LV (SID). Please note that requesting authentication methods with LoA 'substantial' is supported but would result in error as all currently available authentication methods are recognized as 'high'. |
+| request                         | No<br/>(Yes, if RP wishes to pass request parameters in JWT | Request parameters which the RP wishes to pass in a single, self-contained parameter                                                                                                                                                      | Parameter representing the request as a JWT whose Claims are the request parameters            |
 
 <sup> 1 </sup> *Supported scope values for requesting end-user attributes are as follows:*
 
@@ -127,10 +128,35 @@ Authentication Request parameters:
 ### 3.2.1 Signed Authentication Request
 
 Request parameters can be passed also as JWTs by using the `request` parameter. 
-This parameter represents the request claims as JWT (Request Object) whose claims are the request parameters.
-If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail.
-Note that `response_type`, `client_id` and `scope` MUST be included in the request root level. These MAY also be included in JWT - in that case the values MUST match.
+This parameter represents the request claims as JWT (Request Object) whose claims are the request parameters. Any of the request parameters as in Section [3.2](#32-authentication-request-parameters) can be passed using the `request` parameter (the same conditions to authentication request parameters apply (required vs optional, value)).
+Note that `response_type`, `client_id` and `scope` MUST be included in the request root level. These MAY also be included in the JWT - in that case the values inside and outside JWT MUST match.
 On root level, the `scope` parameter MUST contain the `openid` scope value.
+If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail when processed by authorization server.
+
+JWT own claims (required) are: `iss`, `sub`, `aud`, `iat`, `jti`.
+
+*JWT example:*
+```
+{
+  "iss": "bank321",
+  "sub": "bank321",
+  "aud": "https://httpd-proxy",
+  "iat": 1747899848,
+  "exp": 1747903448,
+  "jti": "e212513d-f78d-45a3-8834-d68db5f4c4c7",
+  "client_id": "bank321",
+  "scope": "openid age_over personal_code given_name family_name name birthdate",
+  "response_type": "code",
+  "redirect_uri": "https://httpd-proxy/tester/callback/",
+  "state": "af0ifjsldkj",
+  "nonce": "n-0S6_WzA2Mj",
+  "code_challenge": "hKpKupTM391pE10xfQiorMxXarRKAHRhTfH_xkGf7U4",
+  "code_challenge_method": "S256",
+  "ui_locales": "et en",
+  "acr_values": "mid_ee mid_lt sid idcard",
+  "age_comparator": "18"
+}
+```
 
 Supported cryptographies in signed JWT: RS256, RSA using SHA-256.
 
@@ -208,7 +234,7 @@ GET /authorize?client_id=EinLKYAAMqPr2Tw &request_uri=urn:ietf:params:oauth:requ
 ```
 
 After this, the user is redirected to the login service (located at OIDC_SERVICE/login).
-After authentication, Token can be requested: see Section [3.4.3 Token Request (/token)](#343-token-request-token) and Section [3.4.4 Token Request Response](#344-token-request-response)
+After authentication, Token can be requested: see Section [3.5 Token Request (/token)](#35-token-request-token) and Section [3.5.1 Token Request Response](#351-token-request-response)
 
 ## 3.4 Authentication flow starting with authorization endpoint 
 ### 3.4.1 Initial Authentication Request (`/authorize`)
@@ -241,7 +267,7 @@ OIDC_SERVICE/authorize?scope=openid&response_type=code&redirect_uri=REDIRECT_URI
 
 The user is redirected to the login service (located at `OIDC_SERVICE/login`).
 
-### 3.4.2 Successful Authentication Response
+### 3.4.2 Authentication Response
 
 A standard HTTP 302 authentication response redirect is returned to the end-user if a successful authentication session exists. 
 The redirect points user's browser back to RP's registered `redirect_uri` where the RP shall verify the value of the `state` parameter.
@@ -258,9 +284,17 @@ Successful Response parameters:
 ```
 HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU
 ```
+*Unsuccessful response example:*
+```
+HTTP/1.1 302 Found
+  Location: https://client.example.org/cb?
+    error=invalid_request
+    &error_description=
+      Request_uri%20invalid%20or%20expired
+    &state=af0ifjsldkj
+```
 
-
-### 3.4.3 Token Request (`/token`)
+## 3.5 Token Request (`/token`)
 
 Upon receiving the authorization code from the successful authentication response and having performed all checks required by OIDC core specification (state), the RP backend service posts a backchannel request to the oidc-service `/token` endpoint.
 
@@ -307,7 +341,7 @@ grant_type=authorization_code
 &client_assertion=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJqdGkiOiAiY2ZiMDM5NGEtY2JlOS00MGE4LWEyNDQtZmNlM2Y0MTljNmRhIiwKICAic3ViIjogImJhbmsxMjMiLAogICJpc3MiOiAiYmFuazEyMyIsCiAgImF1ZCI6ICJodHRwczovL2F1dGguc2suZWUvdG9rZW4iLAogICJleHAiOiAxNzE0OTM3NjEwLAogICJpYXQiOiAxNzE0MDM3NjEwCn0=.zK6oUoDcxm-9w7hYpI8-IYlJr55k-S0LY0XvKDdBsuz8AJnZ6JEFS3GS_04SNVP02dqHq44ZGUbpRxkkAOJ8Su2zn7iJGaqr_MLchxddQiYYpHdOiKYqIQ-Yn3oleTlHed0ci84Kh7-BEQB_u7nv2-76wOe339OrHZuNeqejmGeQtMG7vzX5PMDF4wLjvrAxTIptTBKBWLGO02RusEI4uAC-4FrMjjbM4Ygc8U_i8BtZ-Is2FptJlpIAqjMTvGQZdEfenNZWzmVTYn9qKJ3ArXPZg5R07vqsx2YpMenXjbBc5TRS2FTVskwWvfTZn9_ygVvwR1wAzfNNfp7XPcQuUg
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcallback
 ```
-### 3.4.4 Token Request Response
+### 3.5.1 Token Request Response
 
 Authorization server validates the Token request as described in OpenID Connect Core 1.0 section 3.1.3.2.
 
@@ -383,7 +417,7 @@ Decoded ID-token claims:
 | jti              | Yes | A unique identifier for the token, which can be used to prevent reuse of the token |
 
 
-### 3.5 Error Tracing
+### 3.6 Error Tracing
 
 **/par endpoint**
 
