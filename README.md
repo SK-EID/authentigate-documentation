@@ -133,7 +133,7 @@ Note that `response_type`, `client_id` and `scope` MUST be included in the reque
 On root level, the `scope` parameter MUST contain the `openid` scope value.
 If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail when processed by authorization server.
 
-JWT own claims (required) are: `iss`, `sub`, `aud`, `iat`, `jti`.
+JWT own claims (required) are: `iss`, `sub`, `aud`, `iat`.
 
 *JWT example:*
 ```
