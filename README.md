@@ -133,7 +133,15 @@ Note that `response_type`, `client_id` and `scope` MUST be included in the reque
 On root level, the `scope` parameter MUST contain the `openid` scope value.
 If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail when processed by authorization server.
 
-JWT own claims (required) are: `iss`, `sub`, `aud`, `iat`.
+When passing authentication request in a signed JWT, the JWT own claims are: 
+| Claim     | Required   | Value                                                    |
+|-----------|------------|----------------------------------------------------------|
+| `iss`     | Yes        | Must equal "client_id"                                   |
+| `sub`     | Yes        | Must equal "client_id"                                   |
+| `aud`     | Yes        | Must be authorization server /token endpoint             |
+| `jti`     | Yes        | Unique JWT ID used for verifying one-time use of JWT     |
+| `exp`     | Yes        | JWT expiration time; after passing JWT is not accepted   |
+| `iat`     | No         | Time of JWT generation                                   |
 
 *JWT example:*
 ```
@@ -311,6 +319,17 @@ Token request parameters:
 | client_assertion_type | No | If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer' | Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present |
 | client_assertion | No | Valid signed JWT | Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present |
 | redirect_uri | Yes | URL | Must be identical to the parameter value that was included in the initial Authorization Request |
+
+When passing token request in a signed JWT, the JWT own claims are:
+
+| Claim     | Required   | Value                                                    |
+|-----------|------------|----------------------------------------------------------|
+| `iss`     | Yes        | Must equal "client_id"                                   |
+| `sub`     | Yes        | Must equal "client_id"                                   |
+| `aud`     | Yes        | Must be authorization server /token endpoint             |
+| `jti`     | Yes        | Unique JWT ID used for verifying one-time use of JWT     |
+| `exp`     | Yes        | JWT expiration time; after passing JWT is not accepted   |
+| `iat`     | No         | Time of JWT generation                                   |
 
 `Authorization`: basic authentication with client-id and client-secret; only required in case of `client_secret_basic` authentication method. 
 Header MUST NOT be present in case of `private_key_jwt` authentication method. See the examples below.
