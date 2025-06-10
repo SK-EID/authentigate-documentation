@@ -60,14 +60,14 @@ Each client MUST be registered with the following required info:
 |-|-|-|-|-|-|
 | client-id | Yes | A preregistered OIDC client ID | | | |
 | client-secret | Yes | Client secret used for client authentication (Basic authentication) | | | |
-| redirect-uri[] | Yes | A list of allowed callback URIs whitelisted for this client | 1 or many URIs | https://sample-rp.ee/callback  | |
+| redirect-uri[] | Yes | A list of allowed callback URIs whitelisted for this client | 1 or many URIs | https://example.com/callback  | |
 | ip-patterns[]  | Yes | A list of allowed IP patterns allowed for this client to access /token and /par endpoints |   | `192.168.12.*`, `192.168.*`  | |
 | name | Yes | Client full name, shown in frontend | Sample RP  | |   |
 
 Additionally, optional paramaters MAY be configured for a RP:
 | Parameter | Required | Description | Info | Example | Default |
 |-|-|-|-|-|-|
-| sector-identifier-uri   | No | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values | Required if multiple `redirect_uris` are registered | https://sample-rp.ee/redirecti_uris.json | |
+| sector-identifier-uri   | No | HTTPS URL that points to a JSON file containing an array of the client's `redirect_uri` values | Required if multiple `redirect_uris` are registered | https://example.com/redirecti_uris.json | |
 | max-active-par-requests | No | Maximum amount of active PAR requests in a minute. 0 allows no PAR requests | | | 100 |
 | response-types[] | No | Defines a list of allowed OAuth2/OIDC response types for the specific client | | | `code` |
 | logo  | No | Logo encoded in base64, preferably svg for removing issues with different user screen resolutions  | base64 string  |  | |
