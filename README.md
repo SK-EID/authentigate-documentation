@@ -1,9 +1,6 @@
 ## Table of Contents
 * [Glossary](#glossary)
 * [1 Introduction](#1-introduction)
-  * [1.1 Key Benefits](#11-key-benefits)
-  * [1.2 Supported Authentication Methods](#12-supported-authentication-methods)
-  * [1.3 Service Configuration](#13-service-configuration)
 * [2 Client Registration](#2-client-registration)
 * [3 API Specifications](#3-api-specifications)
   * [3.1 Authentication Flows Supported](#31-authentication-flows-supported)
@@ -26,30 +23,7 @@
 * OIDC (OpenID Connect) - A protocol used for central authentication, facilitating secure user verification and attribute sharing.
 
 # 1 Introduction
-Welcome to the official documentation for Authentigate, a platform designed to enable e-services (Relying Parties) to request verified information about users in an automatic, secure, and GDPR-compliant manner. Authentigate is a robust identity verification platform that allows Relying Parties to securely request and receive verified personal information about users. This process is streamlined through the OpenID Connect (OIDC) protocol, ensuring seamless integration with various e-services.
-
-This documentation will guide you through the integration, configuration, and use of Authentigate service. Whether you're a developer, a relying party, or simply interested in learning more, this documentation is your gateway to harnessing the power of our service. Let's get started on this journey to better authentication and data security.
-
-## 1.1 Key Benefits 
-* Fast and Secure Information Sharing: Relying Parties can quickly receive verified user data, while users retain full transparency over which information is being shared.    
-* Easy Integration: Connecting to the OIDC portal is simplified through a single integration based on the OpenID Connect protocol. The unified API supports various authentication methods, such as Smart-ID, Mobile-ID and other.   
-* GDPR Compliance: Relying Parties can request only the information they need, helping them remain GDPR-compliant.
-* Possibility to verify the compliance to certain conditions without revealing actual personal details (e.g. by age comparison, verifying if an end-user is over a certain age without returning their actual age).
-
-## 1.2 Supported Authentication Methods
-Authentigate currently supports multiple eID authentication methods in different regions:
-* Latvia: Smart-ID
-* Lithuania: Smart-ID and Mobile-ID
-* Estonia: Smart-ID, Mobile-ID, and ID-Card
-
-Authentigate is also planning to expand its range of supported eID solutions in the future to enhance coverage and accessibility across more regions and use cases.
-Using the acr_value parameter, a relying party can specify which countries and authentication methods (e.g., Smart-ID, Mobile-ID, ID-Card) should be offered to the end user during the authentication process. 
-
-## 1.3 Service Configuration
-The service configuration metadata, such as supported attributes, endpoints, scopec, et can be requested from the discovery endpoint `/.well-known/openid-configuration`.
-<br>Regarding end-user info, various attributes are supported:
-* For user Identification: personal code, personal code issuing country, given name, family name, full name, birthdate.
-* For age Verification: age, age over, age under.
+Welcome to the official documentation for Authentigate, a platform designed to enable e-services (Relying Parties) to request verified information about users in an automatic, secure, and GDPR-compliant manner. Authentigate is a robust identity verification platform that allows Relying Parties to securely request and receive verified personal information about users. This process is streamlined through the OpenID Connect (OIDC) protocol, ensuring seamless integration with various e-services. Read more about the service here: [Authentigate Overview](https://github.com/SK-EID/authentigate-documentation/wiki/Authentigate-Overview)
 
 # 2 Client Registration
 > [!IMPORTANT]
