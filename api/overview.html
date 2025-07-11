@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Overview :: Authentigate documentation</title>
+    <link rel="canonical" href="https://sk-eid.github.io/authentigate-documentation/api/overview.html">
+    <meta name="generator" content="Antora 3.1.10">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.svg" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://sk-eid.github.io/authentigate-documentation">
+        <img src="../_/img/sk-id-solutions.svg" class="logo" />
+      </a>
+      <span class="separator"></span>
+      <span class="title">Authentigate documentation</span>
+    </div>
+
+    <div class="navbar-right">
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="nav-toggle"></button>    </div>
+
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Documentation</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">Authentigate documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../index.html">Getting started</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../demo.html">Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../environments.html">Environments</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../contact.html">Contact</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">Authentigate API</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="registration.html">Client Registration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html">Specifications</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<!-- SKIP nav-explore -->    </div>
+  </aside>
+</div>
+<main class="article">
+  <div class="content">
+<aside class="toc sidebar" data-title="On this page" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Overview</h1>
+<div class="sect1">
+<h2 id="_what_is_authentigate"><a class="anchor" href="#_what_is_authentigate"></a>What is Authentigate?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Authentigate</strong> is a secure gateway that enables e-services to <strong>easily request and receive verified personal data</strong> about users, based on strong identity verification methods.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_verified_data_can_be_requested"><a class="anchor" href="#_what_verified_data_can_be_requested"></a>What Verified Data Can Be Requested?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Authentigate allows e-services to request the following <strong>user attributes</strong>:</p>
+</div>
+<table class="tableblock frame-none grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>given_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Given name(s) (first names)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>John</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>family_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Family name (surname)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Smith</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Full name (given name + family name)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>John Smith</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthdate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date of birth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>23.04.1982</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>personal_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Personal ID number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>38204232745</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Age in full years</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>34</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age_over</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether user is over a specific age (requires <code>age_comparator</code> parameter)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>yes</code> or <code>no</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age_under</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether user is under a specific age (requires <code>age_comparator</code> parameter)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>yes</code> or <code>no</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">if `age_comparator = 18`, then `age_under = yes` for users 17 or younger.</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_is_the_data_verified"><a class="anchor" href="#_how_is_the_data_verified"></a>How Is the Data Verified?</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Authentigate verifies the <strong>identity of the user</strong> using supported national eID solutions.</p>
+</li>
+<li>
+<p>Data is retrieved from <strong>reliable and authentic sources</strong>, such as <strong>digital certificates</strong> issued by trusted parties.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_supported_identity_verification_methods"><a class="anchor" href="#_supported_identity_verification_methods"></a>Supported Identity Verification Methods</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Country</th>
+<th class="tableblock halign-center valign-top">Smart-ID</th>
+<th class="tableblock halign-center valign-top">Mobile-ID</th>
+<th class="tableblock halign-center valign-top">ID-Card</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Estonia</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Latvia</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lithuania</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Belgium</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_where_can_i_try_or_integrate_authentigate"><a class="anchor" href="#_where_can_i_try_or_integrate_authentigate"></a>Where Can I Try or Integrate Authentigate?</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Try the Demo</dt>
+<dd>
+<p>See how the user flow works here: <a href="../demo.html" class="xref page">Testing in Demo</a></p>
+</dd>
+<dt class="hdlist1">Integrate with Production</dt>
+<dd>
+<p>Step-by-step instructions: <a href="../contact.html" class="xref page">Access to Production</a></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication_methods"><a class="anchor" href="#_authentication_methods"></a>Authentication Methods</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Smart-ID</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>App-based strong authentication solution.</p>
+</li>
+<li>
+<p>Available in Estonia, Latvia, Lithuania, and Belgium.</p>
+</li>
+<li>
+<p>Suitable for both personal and organizational use.
+<a href="https://sk-eid.github.io/smart-id-documentation">More about Smart-ID</a></p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Upcoming:</strong> In <strong>Q4 2025</strong>, Smart-ID integration will be updated to the latest API version.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Mobile-ID</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>SIM card-based strong authentication.</p>
+</li>
+<li>
+<p>Available in Estonia and Lithuania.
+<a href="https://github.com/SK-EID/MID/wiki">More about Mobile-ID</a></p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">ID-card (Estonia)</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Physical ID card used with a smart card reader.</p>
+</li>
+<li>
+<p>Mandatory for Estonian citizens and EU residents in Estonia.
+<a href="https://e-estonia.com/solutions/e-identity/id-card/">More about ID-card</a></p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_need_more_details"><a class="anchor" href="#_need_more_details"></a>Need More Details?</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Full API documentation: <a href="index.html" class="xref page">Authentigate API Spec</a></p>
+</li>
+<li>
+<p>Environment parameters: <a href="../environments.html" class="xref page">Demo &amp; Live Config</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>© 2025 SK ID Solutions AS</p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/tabs.js" data-sync-storage-key="language"></script>
+<script src="../_/js/vendor/lunr.js"></script>
+<script src="../_/js/search-ui.js" id="search-ui-script" data-site-root-path=".." data-snippet-length="100" data-stylesheet="../_/css/search.css"></script>
+<script async src="../search-index.js"></script>
+  </body>
+</html>

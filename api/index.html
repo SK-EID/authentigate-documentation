@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Specifications :: Authentigate documentation</title>
+    <link rel="canonical" href="https://sk-eid.github.io/authentigate-documentation/api/index.html">
+    <meta name="generator" content="Antora 3.1.10">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.svg" type="image/x-icon">
+  </head>
+  <body class="article -toc">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://sk-eid.github.io/authentigate-documentation">
+        <img src="../_/img/sk-id-solutions.svg" class="logo" />
+      </a>
+      <span class="separator"></span>
+      <span class="title">Authentigate documentation</span>
+    </div>
+
+    <div class="navbar-right">
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="nav-toggle"></button>    </div>
+
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Documentation</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">Authentigate documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../index.html">Getting started</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../demo.html">Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../environments.html">Environments</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../contact.html">Contact</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">Authentigate API</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="registration.html">Client Registration</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="index.html">Specifications</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<!-- SKIP nav-explore -->    </div>
+  </aside>
+</div>
+<main class="article">
+  <div class="content">
+<aside class="toc sidebar" data-title="On this page" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Specifications</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Glossary</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Attribute - Any piece of information related to a person that can be optionally shared during an OIDC authentication transaction, providing additional user details.</p>
+</li>
+<li>
+<p>Authentigate - A service developed by SK to offer attribute storage, calculation and sharing functionalities, allowing for the secure and controlled exchange of user information during authentication.</p>
+</li>
+<li>
+<p>RP (Relying Party) - An organization or service that utilizes the SK authentication gateway service to authenticate its users and verify their age.</p>
+</li>
+<li>
+<p>OIDC (OpenID Connect) - A protocol used for central authentication, facilitating secure user verification and attribute sharing.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication_flows_supported"><a class="anchor" href="#_authentication_flows_supported"></a>Authentication Flows Supported</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Authentigate service supports two endpoints for initiating authentication:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authorization endpoint (<strong>/authorize</strong>), using POST or GET request after which the user is redirected to login service at OIDC_SERVICE/login.</p>
+</li>
+<li>
+<p>Pushed Authentication Request, PAR (<strong>/par</strong>) where Authentigate service validates the POST request and responds with a URI for starting authentication.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication_request_parameters"><a class="anchor" href="#_authentication_request_parameters"></a>Authentication Request Parameters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Regardless of authentication flow, the Authentication Request MUST include all required parameters (per parameter, this may vary depending on the flow used - this is highlighted in the table below).
+Including non-required parameters is optional.
+Authentigate supports both signed and unsigned Authentication Requests. For passing request parameters as JWT, <code>request</code> parameter must be used (see <a href="#_signed_authentication_request">Signed Authentication Request</a>).</p>
+</div>
+<div class="paragraph">
+<p>Authentication Request parameters:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 30%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-center valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must contain 'openid'. Supported scopes can also be retrieved from /.well-known/openid-configuration <a href="#note1"><sup>[1]</sup></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by OIDC core protocol and additional user information relying party needs. Values separated by spaces.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
+ (Yes, when scope includes <code>age_over</code> or <code>age_under</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies against which age should comparison be made</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be 'code'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization code flow is used</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relying-party ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A pre-registered relying-party identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes<br>
+(No, in case of signed request)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relying-party callback URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A pre-registered relying party callback URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes<br>
+(No, in case of signed request)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP generated opaque value used to maintain state between the request and the callback. Can be used to mitigate replay and CSRF attacks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nonce</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ui_locales</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of et, en, lv, lt (or multiple in order of importance, separated by spaces)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End-User&#8217;s preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to 'en' if detection fails.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
+(Yes, in case of basic authentication)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base64 encoded hash of a unique challenge.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base64 encoded hash of a unique challenge. The code-challenge is created by SHA256 hashing the code_verifier and base64 URL encoding the resulting hash Base64UrlEncode(SHA256Hash(code_verifier)). You can view an example from <a href="https://tonyxu-io.github.io/pkce-generator/" class="bare">https://tonyxu-io.github.io/pkce-generator/</a>.<br>
+NB! Must be present if not using JWT authentication.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
+(Yes, in case of basic authentication)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be 'S256'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The algorithm by which the challenge shall be verified on the server side. Must be present if client 'code-challenge-required' is true or if not using JWT authentication.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sid_confirmation<br>
+_message</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String with information for users for the SID authentication app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation<br>
+_message</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String with information for users for the MID authentication app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation<br>
+_message_format</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of GSM-7, UCS-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( ´+€[]^&#124;{}\ +´) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space separated string containing one or more of the following values: <code>http://eidas.europa.eu/LoA/high</code>, <code>http://eidas.europa.eu/LoA/substantial</code>, <code>mid</code>, <code>mid_ee</code>, <code>mid_lt</code>, <code>sid</code>, <code>sid_ee</code>, <code>sid_lv</code>, <code>sid_lt</code>, <code>idcard</code>, <code>idcard_ee</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional value specifying authentication methods to be usable by the end-user.<br>
+Order of provided values affects the presentation of authentication options to the end-user. Acr values that appear earlier will be prioritized. Example order:<br>
+<code>mid_lt mid_ee sid_lv sid_lt sid_ee</code> - LT (MID, SID), EE (SID, MID), LV (SID). Please note that requesting authentication methods with LoA 'substantial' is supported but would result in error as all currently available authentication methods are recognized as 'high'.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">request</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
+(Yes, if RP wishes to pass request parameters in JWT)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request parameters which the RP wishes to pass in a single, self-contained parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter representing the request as a JWT whose Claims are the request parameters</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><a id="note1"></a><sup>1</sup> <strong>Supported scope values for requesting end-user attributes are as follows:</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Scope claim</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>family_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Family name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>given_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthdate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date of birth</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Full name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/personal_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Personal identification code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/eid_issuing_country</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Country code that has issued the personal identification code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actual age</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/age_under</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verification of end-user being under certain age - if requested in scope, the parameter <code>age_comparator</code> must be provided in request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/age_over</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verification of end-user being over certain age - if requested in scope, the parameter <code>age_comparator</code> must be provided in request</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_signed_authentication_request"><a class="anchor" href="#_signed_authentication_request"></a>Signed Authentication Request</h3>
+<div class="paragraph">
+<p>Request parameters can be passed also as JWTs by using the <code>request</code> parameter.
+This parameter represents the request claims as JWT (Request Object) whose claims are the request parameters. Any of the request parameters as in <a href="#_authentication_request_parameters">Authentication Request Parameters</a> can be passed using the <code>request</code> parameter (the same conditions to authentication request parameters apply (required vs optional, value)).
+Note that <code>response_type</code>, <code>client_id</code> and <code>scope</code> MUST be included in the request root level. These MAY also be included in the JWT - in that case the values inside and outside JWT MUST match.
+On root level, the <code>scope</code> parameter MUST contain the <code>openid</code> scope value.
+If any parameter is included both outside AND inside JWT Request Object, the ones inside  prevail when processed by authorization server.</p>
+</div>
+<div class="paragraph">
+<p>When passing authentication request in a signed JWT, the JWT own claims are:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Claim</th>
+<th class="tableblock halign-center valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iss</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must equal "client_id"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sub</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must equal "client_id"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aud</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be authorization server /token endpoint</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jti</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique JWT ID used for verifying one-time use of JWT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exp</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT expiration time; after passing JWT is not accepted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iat</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time of JWT generation</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title"><strong>JWT example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "iss": "bank321",
+  "sub": "bank321",
+  "aud": "https://httpd-proxy",
+  "iat": 1747899848,
+  "exp": 1747903448,
+  "jti": "e212513d-f78d-45a3-8834-d68db5f4c4c7",
+  "client_id": "bank321",
+  "scope": "openid age_over personal_code given_name family_name name birthdate",
+  "response_type": "code",
+  "redirect_uri": "https://httpd-proxy/tester/callback/",
+  "state": "af0ifjsldkj",
+  "nonce": "n-0S6_WzA2Mj",
+  "code_challenge": "hKpKupTM391pE10xfQiorMxXarRKAHRhTfH_xkGf7U4",
+  "code_challenge_method": "S256",
+  "ui_locales": "et en",
+  "acr_values": "mid_ee mid_lt sid idcard",
+  "age_comparator": "18"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Supported cryptographies in signed JWT: RS256, RSA using SHA-256.</p>
+</div>
+<div class="paragraph">
+<p>Authorization server validates JWT signature and payload fields on the JWT according to OpenID Connect specifications.
+Please note that using <code>request_uri</code> parameter is not supported!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication_flow_using_par"><a class="anchor" href="#_authentication_flow_using_par"></a>Authentication Flow Using PAR</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_initial_authentication_request_par"><a class="anchor" href="#_initial_authentication_request_par"></a>Initial Authentication Request (<code>/par</code>)</h3>
+<div class="paragraph">
+<p>OIDC requests are initiated via PAR (pushed authentication request). For this, a <strong>POST</strong> request with parameters formatted with application/x-www-form-urlencoded using a character encoding of UTF-8 is sent to <code>OIDC_SERVICE/par</code>.
+See the request parameters described at <a href="#_authentication_request_parameters">Authentication Request Parameters</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>PAR flow authentication request, Example 1:</strong> Request person&#8217;s full name and a verification that the person is over 18 years old</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "response_type": "code",
+    "client_id": "CLIENT_ID",
+    "redirect_uri": "REDIRECT_URI",
+    "state": "STATE",
+    "nonce": "NONCE",
+    "scope": "openid https://id.authentigate.eu/claims/name https://id.authentigate.eu/claims/age_over",
+    "acr_values": "http://eidas.europa.eu/LoA/high",
+    "age_comparator": "18",
+    "code_challenge": "CODE_CHALLENGE",
+    "code_challenge_method": "S256",
+    "sid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message_format": "GSM-7"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>PAR flow authentication request, Example 2:</strong> Request person&#8217;s given name, family name, and age</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "response_type": "code",
+    "client_id": "CLIENT_ID",
+    "redirect_uri": "REDIRECT_URI",
+    "state": "STATE",
+    "nonce": "NONCE",
+    "scope": "openid https://eidas.europa.eu/attributes/naturalperson/FirstName https://eidas.europa.eu/attributes/naturalperson/FamilyName https://id.authentigate.eu/claims/age",
+    "acr_values": "http://eidas.europa.eu/LoA/high",
+    "code_challenge": "CODE_CHALLENGE",
+    "code_challenge_method": "S256",
+    "sid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message_format": "GSM-7"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please pay attention that client id and client secret should be passed in <code>Authorization</code> header of <code>/par</code> request in a format that OAuth 2.0 foresees for client secret authorization method.
+According to OAuth 2.0 framework, <code>Authorization</code> header must be in the <code>Authorization: Basic encodedString</code> format, where the <code>encodedString</code> is a result of Base64 encoding of OAuth client’s <code>clientID:clientSecret</code>.</p>
+</div>
+<div class="paragraph">
+<p>The oidc-service shall validate the authentication request and respond with a URI that the public client can use to start authentication.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Authentication request response example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">HTTP/1.1 201 Created
+Cache-Control: no-cache, no-store
+Content-Type: application/json
+
+{
+   "request_uri": "urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5",
+   "expires_in": 90
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the returned link, the app can open end-user&#8217;s browser with the corresponding url.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authentication_redirect_authorize"><a class="anchor" href="#_authentication_redirect_authorize"></a>Authentication Redirect (<code>/authorize</code>)</h3>
+<div class="paragraph">
+<p>The app should open the link with an external user agent as recommended by current OAuth2 for native clients best practices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">GET /authorize?client_id=EinLKYAAMqPr2Tw &amp;request_uri=urn:ietf:params:oauth:request_uri:8Tw6nn6BAvoHBS5VM7M1UvndAAHdM5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After this, the user is redirected to the login service (located at OIDC_SERVICE/login).
+After authentication, Token can be requested: see <a href="#_token_request_token">Token Request (<code>/token</code>)</a> and <a href="#_token_request_response">Token Request Response</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication_flow_starting_with_authorization_endpoint"><a class="anchor" href="#_authentication_flow_starting_with_authorization_endpoint"></a>Authentication flow starting with authorization endpoint</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_initial_authentication_request_authorize"><a class="anchor" href="#_initial_authentication_request_authorize"></a>Initial Authentication Request (<code>/authorize</code>)</h3>
+<div class="paragraph">
+<p>OIDC requests are initiated via authorization endpoint. A <strong>POST</strong> or <strong>GET</strong> request with parameters formatted with <code>application/x-www-form-urlencoded</code> using a character encoding of UTF-8 is sent to <code>OIDC_SERVICE/authorize</code>.
+See the request parameters described at <a href="#_authentication_request_parameters">Authentication Request Parameters</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>POST request body example, requesting all scopes:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "response_type": "code",
+    "client_id": "CLIENT_ID",
+    "redirect_uri": "REDIRECT_URI",
+    "state": "STATE",
+    "nonce": "NONCE",
+    "scope": "openid",
+    "acr_values": "http://eidas.europa.eu/LoA/high",
+    "code_challenge": "CODE_CHALLENGE",
+    "code_challenge_method": "S256",
+    "sid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message": "FREETEXT",
+    "mid_confirmation_message_format": "GSM-7"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>GET request with Query string example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">OIDC_SERVICE/authorize?scope=openid&amp;response_type=code&amp;redirect_uri=REDIRECT_URI&amp;state=STATE&amp;nonce=NONCE&amp;code_challenge=CODE_CHALLENGE&amp;code_challenge_method=S256</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The user is redirected to the login service (located at <code>OIDC_SERVICE/login</code>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authentication_response"><a class="anchor" href="#_authentication_response"></a>Authentication Response</h3>
+<div class="paragraph">
+<p>A standard HTTP 302 authentication response redirect is returned to the end-user if a successful authentication session exists.
+The redirect points user&#8217;s browser back to RP&#8217;s registered <code>redirect_uri</code> where the RP shall verify the value of the <code>state</code> parameter.</p>
+</div>
+<div class="paragraph">
+<p>Successful Response parameters:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-center valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A single-use, client-bound, short-lived authorization code, that can be used at OIDC token endpoint to redeem the id-token.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP&#8217;s state parameter value specified in the Authorization Request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP&#8217;s redirect_uri specified in the Authorization Request</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title"><strong>HTTP 302 response example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">HTTP/1.1 302 Found Location: https://client.example.org/callback?code=GaqukjWp4vvzEWHnLW7phLlwkpB0 &amp;state=WDm4nExm1ADHzIEwoPxQ0KjBwnnk6NIrq178fU4rBDU</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unsuccessful response includes error, error description and <code>state</code> parameter value (must match with the value in request).</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Unsuccessful response example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">HTTP/1.1 302 Found
+  Location: https://client.example.org/cb?
+    error=invalid_request
+    &amp;error_description=
+      Request_uri%20invalid%20or%20expired
+    &amp;state=af0ifjsldkj</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_token_request_token"><a class="anchor" href="#_token_request_token"></a>Token Request (<code>/token</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Upon receiving the authorization code from the successful authentication response and having performed all checks required by OIDC core specification (state), the RP backend service posts a backchannel request to the oidc-service <code>/token</code> endpoint.</p>
+</div>
+<div class="paragraph">
+<p>Token request parameters:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-center valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grant_type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be <code>authorization_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by the OIDC core protocol</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authorization code value returned from the OIDC-service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_verifier</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">High-entropy cryptographic random string. Related to code-challenge given in par request. Must be present if client 'code-challenge-required' is true or if not using JWT authentication</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_assertion_type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_assertion</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valid signed JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be identical to the parameter value that was included in the initial Authorization Request</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>When passing token request in a signed JWT, the JWT own claims are:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Claim</th>
+<th class="tableblock halign-center valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iss</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must equal "client_id"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sub</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must equal "client_id"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aud</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be authorization server /token endpoint</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jti</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique JWT ID used for verifying one-time use of JWT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exp</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT expiration time; after passing JWT is not accepted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iat</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time of JWT generation</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><code>Authorization</code>: basic authentication with client-id and client-secret; only required in case of <code>client_secret_basic</code> authentication method.
+Header MUST NOT be present in case of <code>private_key_jwt</code> authentication method. See the examples below.</p>
+</div>
+<div class="paragraph">
+<p><strong>Token request examples:</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">Using <code>client_secret_basic</code> authentication:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">POST /token HTTP/1.1
+Host: oidc.demo.sk.ee
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic c2FtcGxlX2NsaWVudF8xOjNkc8OEMDIrMSwubTExMmxrMjPDtmxrw7ZsazMyMw
+
+grant_type=authorization_code
+&amp;code=GaqukjWp4vvzEWHnLW7phLlwkpB0
+&amp;code_verifier=yJhbGciOiJSUzI1NiIsImtpZ
+&amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcallback</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Using <code>private_key_jwt</code> authentication:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>POST /token HTTP/1.1
+Host: oidc.demo.sk.ee
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+&amp;code=GaqukjWp4vvzEWHnLW7phLlwkpB0
+&amp;code_verifier=yJhbGciOiJSUzI1NiIsImtpZ
+&amp;client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+&amp;client_assertion=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJqdGkiOiAiY2ZiMDM5NGEtY2JlOS00MGE4LWEyNDQtZmNlM2Y0MTljNmRhIiwKICAic3ViIjogImJhbmsxMjMiLAogICJpc3MiOiAiYmFuazEyMyIsCiAgImF1ZCI6ICJodHRwczovL2F1dGguc2suZWUvdG9rZW4iLAogICJleHAiOiAxNzE0OTM3NjEwLAogICJpYXQiOiAxNzE0MDM3NjEwCn0=.zK6oUoDcxm-9w7hYpI8-IYlJr55k-S0LY0XvKDdBsuz8AJnZ6JEFS3GS_04SNVP02dqHq44ZGUbpRxkkAOJ8Su2zn7iJGaqr_MLchxddQiYYpHdOiKYqIQ-Yn3oleTlHed0ci84Kh7-BEQB_u7nv2-76wOe339OrHZuNeqejmGeQtMG7vzX5PMDF4wLjvrAxTIptTBKBWLGO02RusEI4uAC-4FrMjjbM4Ygc8U_i8BtZ-Is2FptJlpIAqjMTvGQZdEfenNZWzmVTYn9qKJ3ArXPZg5R07vqsx2YpMenXjbBc5TRS2FTVskwWvfTZn9_ygVvwR1wAzfNNfp7XPcQuUg
+&amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcallback</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_token_request_response"><a class="anchor" href="#_token_request_response"></a>Token Request Response</h3>
+<div class="paragraph">
+<p>Authorization server validates the Token request as described in OpenID Connect Core 1.0 section 3.1.3.2.</p>
+</div>
+<div class="paragraph">
+<p>If token request is invalid, authorization server constructs the error response with HTTP response code 400.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Token error response example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  Cache-Control: no-store
+  Pragma: no-cache
+
+  {
+   "error": "invalid_grant",
+   "error_description": "The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If token request validation is successful, authorization server returns a an application/json media type response that includes ID token and access token.
+The ID token is a signed JWT that contains token claims, including the requested attributes of authenticated end-user.</p>
+</div>
+<div class="paragraph">
+<p>On authorization server side, the session expires in 60 seconds.</p>
+</div>
+<div class="paragraph">
+<p>Token response parameters:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">access_token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An opaque random string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requested scopes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scope values as requested</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expires_in</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Expiration time in seconds</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id_token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A serialized and signed JWT, including end-user claims requested in scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">token_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bearer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access token Type</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title"><strong>Token success response example:</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    "access_token": "SlAV32hkKG",
+    "token_type": "Bearer",
+    "scope": "openid https://id.authentigate.eu/claims/age_under"
+    "expires_in": 3600,
+    "id_token": "eyJhbGciOiJSUzI1NiIsImtpZ...LrLl0nx7RkKU8NXNHq-rvKMzqg"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The RP must validate the id_token signature and claims as specified in the OIDC core specification.</p>
+</div>
+<div class="paragraph">
+<p>Decoded ID-token claims:</p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Claim</th>
+<th class="tableblock halign-left valign-top">Required in token</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pairwise subject unique identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">amr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Methods References</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Issuer URL. Issuer identifier for the issuer of the response</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication flow requested response type used</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Age comparison value from request (required if was provided in request)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Code challenge method - S256 or PLAIN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nonce</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String value. Used to associate a Client session with an ID Token, and to mitigate replay attacks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP id associated with the authentication flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Audience that this ID Token is intended for. Contains the Relying Party ID as an audience value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Context Class Reference</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ui_locales</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Context Class Reference</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP-requested scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values value from request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">attribues.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key-value map of end-user info claims as requested by RP in scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP-provided redirect url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RP-provided state value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">exp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Expiration time on or after which the ID Token MUST NOT be accepted for processing</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time at which the JWT was issued</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Code challenge associated with the authorization code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jti</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A unique identifier for the token, which can be used to prevent reuse of the token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_error_tracing"><a class="anchor" href="#_error_tracing"></a>Error Tracing</h3>
+<div class="paragraph">
+<p><strong>/par endpoint</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>/par response errors</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">405</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Method <code>[{0}]</code> not allowed for URI [/par]. Allowed methods: [POST]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">413</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The content length <code>[{0}]</code> exceeds the maximum allowed content length <code>[{1}]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">415</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type <code>[{0}]</code> not allowed. Allowed types: [application/x-www-form-urlencoded]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">429</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">too_many_requests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Too many pending PAR requests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">server_error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization server encountered an unexpected condition that prevented it from fulfilling the request</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/par - request validation errors</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 16.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Parameter causing the error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The requested scope is invalid. Client: [%s] is not allowed to request scope value(s): %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsupported_response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization server does not support obtaining an authorization code using this method.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing client_id parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization request not found for provided uri</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing state parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing mid_confirmation_message_format parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format must be one of: GSM-7, UCS-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing age_comparator parameter when using age_over or age_under scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter value for code_challenge_method is not supported. Supported values are: %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge_method parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid redirect_uri.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr_values provided. Client: [%s] is not allowed to use acr [%s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr values: %s. Supported values are: %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/authorize endpoint</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>/authorize response errors</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request_uri invalid or expired</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user_cancel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User canceled authentication</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/authorize - standard flow</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 16.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Parameter causing the error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The requested scope is invalid. Client: [%s] is not allowed to request scope value(s): %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsupported_response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization server does not support obtaining an authorization code using this method.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing client_id parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing required parameters - request_uri or %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">request_uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing state parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter value for code_challenge_method is not supported. Supported values are: %s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing mid_confirmation_message_format parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format must be one of: GSM-7, UCS-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing age_comparator parameter when using age_over or age_under scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr values: [%s]. Supported values are: [%s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge_method parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid redirect_uri.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr_values provided. Client: [%s] is not allowed to use acr [%s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/authorize - JWT flow</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 16.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Parameter causing the error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The requested scope is invalid. Client: [&lt;client_id&gt;] is not allowed to request scope value(s): [&lt;scope values in the request&gt;]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsupported_response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization server does not support obtaining an authorization code using this method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing client_id parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing scope parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The scope must include an openid value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid redirect_uri.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing response_type parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsupported response_type parameter: Unsupported OpenID Connect response type value: invalid_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing client_id parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing redirect_uri parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing state parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing nonce parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nonce</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr values: [%s]. Supported values are: [%s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid acr_values provided. Client: &lt;client_id&gt; is not allowed to use acr [&lt;invalid acr value&gt;]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_challenge_method parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter value for code_challenge_method is not supported. Supported values are: [%s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MID confirmation message too long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing mid_confirmation_message_format parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format must be one of: GSM-7, UCS-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation_message_format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing age_comparator parameter when using age_over or age_under scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing required parameters - [%s]</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid signed request JWT</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to extract claims from JWT</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'iss' value.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Signed request 'iss' does not match provided client_id.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid client assertion.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'jti' value.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'exp' value.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'iat' value.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'aud' for request object (none provided).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'aud' for request object (must match OP issuer).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'sub' value: must match client_id</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter 'request' is not allowed inside signed 'request' JWT parameter.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter 'client_id' included in signed 'request' JWT parameter does not match the one provided in request.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter 'response_type' included in signed 'request' JWT parameter does not match the one provided in request.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter 'scope' included in signed 'request' JWT parameter does not match the one provided in request.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to build request from AuthorizeRequest</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/token endpoint</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>/token - JWT flow</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required Body [tokenRequest] not specified</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'grant’ must not be blank</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'code’ must not be blank</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid client assertion type.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'redirectUri’ must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing 'client_assertion’ parameter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing 'client_assertion_type' parameter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Session is expired.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_verifier parameter</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No code_challenge parameter was provided previously</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization request not found for provided uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The request is missing a required parameter, includes an unsupported parameter value (other than grant type),<br>
+repeats a parameter, includes multiple credentials, utilizes more than one mechanism for authenticating the client,<br>
+or is otherwise malformed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid client assertion.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'iss' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'sub' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'jti' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'aud' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'exp' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid 'iat' value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_grant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsupported_grant_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization grant type is not supported by the authorization server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authenticated client id (%s) and session client value (%s) do not match</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authenticated client id (%s) and authentication request client value (%s) do not match</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>/token - basic authentication flow</strong></p>
+</div>
+<table class="tableblock frame-all grid-none stripes-odd stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">HTTP status code</th>
+<th class="tableblock halign-left valign-top">Error code</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required Body [tokenRequest] not specified</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'grant’ must not be blank</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'code’ must not be blank</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid client assertion type.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'redirectUri’ must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing 'client_assertion’ parameter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing 'client_assertion_type' parameter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Session is expired.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Missing code_verifier parameter</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No code_challenge parameter was provided previously</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization request not found for provided uri</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The request is missing a required parameter, includes an unsupported parameter value (other than grant type),<br>
+repeats a parameter, includes multiple credentials, utilizes more than one mechanism for authenticating the client,<br>
+or is otherwise malformed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_grant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The provided authorization code is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsupported_grant_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authorization grant type is not supported by the authorization server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authenticated client id (%s) and session client value (%s) do not match</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">401</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invalid_client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authenticated client id (%s) and authentication request client value (%s) do not match</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>© 2025 SK ID Solutions AS</p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/tabs.js" data-sync-storage-key="language"></script>
+<script src="../_/js/vendor/lunr.js"></script>
+<script src="../_/js/search-ui.js" id="search-ui-script" data-site-root-path=".." data-snippet-length="100" data-stylesheet="../_/css/search.css"></script>
+<script async src="../search-index.js"></script>
+  </body>
+</html>
