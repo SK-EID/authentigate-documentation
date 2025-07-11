@@ -1,0 +1,9 @@
+* Authentigate documentation
+** xref:ROOT:ROOT:index.adoc[Getting started]
+** xref:ROOT:ROOT:demo.adoc[]
+** xref:ROOT:ROOT:environments.adoc[]
+** xref:ROOT:ROOT:contact.adoc[]
+* Authentigate API
+** xref:api:overview.adoc[]
+** xref:api:registration.adoc[]
+** xref:api:index.adoc[]

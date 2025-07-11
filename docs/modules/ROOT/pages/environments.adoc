@@ -1,0 +1,28 @@
+= Environments
+
+== LIVE
+
+[cols="1,3"]
+[options="header", stripes=odd, grid=none, frame=none]
+|===
+| Parameter | Value  
+| base URL | https://id.authentigate.eu
+| DNS name | id.authentigate.eu
+| IP address | 91.223.243.17
+|===
+
+
+[IMPORTANT]
+
+Add Authentigate to your e-service! xref:contact.adoc[Order now]
+
+
+
+== DEMO
+
+[cols="1,3"]
+[options="header", stripes=odd, grid=none, frame=none]
+|===
+|  Parameter | Value  
+|  base URL | https://oidc.demo.sk.ee/
+|===

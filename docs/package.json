@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "antora": "3.1.10",
+    "@antora/lunr-extension": "^1.0.0-alpha.10",
+    "asciidoctor-openblock": "file:extensions/asciidoctor-openblock"
+  }
+}

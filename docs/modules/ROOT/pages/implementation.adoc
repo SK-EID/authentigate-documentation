@@ -1,0 +1,6 @@
+= Authentigate integration
+
+Use following specification for integrating Smart-ID into your system::
+xref:ROOT:api:index.adoc[Implementation guide] +
+xref:environments.adoc[Environment technical parameters] +
+xref:contact.adoc[Get access]
