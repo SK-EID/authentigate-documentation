@@ -46,6 +46,9 @@ Additionally, optional paramaters MAY be configured for a RP:
 | Logo  | No | Logo in svg format for removing issues with different user screen resolutions  |   |  | |
 | background-color  | No | Frontend background color, in hex format   | | `#ff0000`  | |
 | JWKs | No  | A list of JWK public keys to be used for validation in case 'private_key_jwt' authentication method is chosen |  | Format as here: https://datatracker.ietf.org/doc/html/rfc7517#appendix-A.1 | |
+| code-challenge-required | No   | Boolean value specifying whether this client must use code challenge in their requests  |  | `true`   | `true`   |
+| access-token-expiration-time-in-seconds | No  | Time in seconds  |  | 3600 | 3600 |
+| sid-flows-enabled[]    | No  | Defines a list of enabled Smart-ID flows for the specific client: notification flow or device-link flow or both  | If not specified, then all flows are enabled for respective client.<br/>Supported values: notification,device-link | device-link | |
 
 # 3 API specifications
 ## 3.1 Authentication Flows Supported
