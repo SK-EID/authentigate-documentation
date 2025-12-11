@@ -38,13 +38,13 @@ if `age_comparator = 18`, then `age_under = yes` for users 17 or younger.
 == Supported Identity Verification Methods
 
 [cols="1,^1,^1,^1",^1", options="header", stripes=odd, grid=none, frame=none]
-|===
+|====
 | Country   | Smart-ID | Mobile-ID | ID-Card | eParaksts 
 | Estonia   | ✅ | ✅ | ✅ | 
 | Latvia    | ✅ |    |     | ✅    
 | Lithuania | ✅ | ✅ |    |    
 | Belgium   | ✅ |    |    |   
-|===
+|====
 
 == Where Can I Try or Integrate Authentigate?
 
