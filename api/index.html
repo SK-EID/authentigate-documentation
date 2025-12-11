@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.svg" type="image/x-icon">
   </head>
-  <body class="article -toc">
+  <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
@@ -81,16 +81,14 @@
 </div>
 <main class="article">
   <div class="content">
-<aside class="toc sidebar" data-title="On this page" data-levels="2">
+<aside class="toc sidebar" data-title="On this page" data-levels="1">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
 <h1 class="page">Specifications</h1>
-<div id="preamble">
+<div class="sect1">
+<h2 id="_glossary"><a class="anchor" href="#_glossary"></a>Glossary</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><strong>Glossary</strong></p>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -155,58 +153,58 @@ Authentigate supports both signed and unsigned Authentication Requests. For pass
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scope</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must contain 'openid'. Supported scopes can also be retrieved from /.well-known/openid-configuration <a href="#note1"><sup>[1]</sup></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by OIDC core protocol and additional user information relying party needs. Values separated by spaces.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age_comparator</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
  (Yes, when scope includes <code>age_over</code> or <code>age_under</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies against which age should comparison be made</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response_type</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be 'code'</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The authorization code flow is used</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>client_id</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Relying-party ID</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A pre-registered relying-party identifier</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redirect_uri</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes<br>
 (No, in case of signed request)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Relying-party callback URL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A pre-registered relying party callback URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes<br>
 (No, in case of signed request)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP generated opaque value used to maintain state between the request and the callback. Can be used to mitigate replay and CSRF attacks</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">nonce</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nonce</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ui_locales</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ui_locales</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of et, en, lv, lt (or multiple in order of importance, separated by spaces)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">End-User&#8217;s preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to 'en' if detection fails.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code_challenge</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
 (Yes, in case of basic authentication)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Base64 encoded hash of a unique challenge.</p></td>
@@ -214,43 +212,43 @@ Authentigate supports both signed and unsigned Authentication Requests. For pass
 NB! Must be present if not using JWT authentication.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code_challenge_method</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
 (Yes, in case of basic authentication)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be 'S256'.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The algorithm by which the challenge shall be verified on the server side. Must be present if client 'code-challenge-required' is true or if not using JWT authentication.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">sid_confirmation<br>
-_message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sid_confirmation<br>
+_message</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String with information for users for the SID authentication app</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation<br>
-_message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mid_confirmation<br>
+_message</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String with information for users for the MID authentication app</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">mid_confirmation<br>
-_message_format</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mid_confirmation<br>
+_message_format</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of GSM-7, UCS-2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( ´+€[]^&#124;{}\ +´) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acr_values</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Space separated string containing one or more of the following values: <code>http://eidas.europa.eu/LoA/high</code>, <code>http://eidas.europa.eu/LoA/substantial</code>, <code>mid</code>, <code>mid_ee</code>, <code>mid_lt</code>, <code>sid</code>, <code>sid_ee</code>, <code>sid_lv</code>, <code>sid_lt</code>, <code>idcard</code>, <code>idcard_ee</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space separated string containing one or more of the following values: <code>http://eidas.europa.eu/LoA/high</code>, <code>http://eidas.europa.eu/LoA/substantial</code>, <code>mid</code>, <code>mid_ee</code>, <code>mid_lt</code>, <code>sid</code>, <code>sid_ee</code>, <code>sid_lv</code>, <code>sid_lt</code>, <code>idcard</code>, <code>idcard_ee</code>, <code>eparaksts</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional value specifying authentication methods to be usable by the end-user.<br>
 Order of provided values affects the presentation of authentication options to the end-user. Acr values that appear earlier will be prioritized. Example order:<br>
 <code>mid_lt mid_ee sid_lv sid_lt sid_ee</code> - LT (MID, SID), EE (SID, MID), LV (SID). Please note that requesting authentication methods with LoA 'substantial' is supported but would result in error as all currently available authentication methods are recognized as 'high'.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>request</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No<br>
 (Yes, if RP wishes to pass request parameters in JWT)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Request parameters which the RP wishes to pass in a single, self-contained parameter</p></td>
@@ -259,7 +257,7 @@ Order of provided values affects the presentation of authentication options to t
 </tbody>
 </table>
 <div class="paragraph">
-<p><a id="note1"></a><sup>1</sup> <strong>Supported scope values for requesting end-user attributes are as follows:</strong></p>
+<p><a id="note1"></a><sup>1</sup> <em>Supported scope values for requesting end-user attributes are as follows:</em></p>
 </div>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
@@ -294,12 +292,12 @@ Order of provided values affects the presentation of authentication options to t
 <td class="tableblock halign-left valign-top"><p class="tableblock">Personal identification code</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/eid_issuing_country</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/personal_code_country</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Country code that has issued the personal identification code</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/age</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Actual age</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actual age in completed years</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>https://id.authentigate.eu/claims/age_under</code></p></td>
@@ -560,19 +558,19 @@ The redirect points user&#8217;s browser back to RP&#8217;s registered <code>red
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A single-use, client-bound, short-lived authorization code, that can be used at OIDC token endpoint to redeem the id-token.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP&#8217;s state parameter value specified in the Authorization Request</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redirect_uri</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">URL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP&#8217;s redirect_uri specified in the Authorization Request</p></td>
@@ -628,37 +626,37 @@ The redirect points user&#8217;s browser back to RP&#8217;s registered <code>red
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grant_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grant_type</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be <code>authorization_code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by the OIDC core protocol</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authorization code value returned from the OIDC-service</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code_verifier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code_verifier</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">High-entropy cryptographic random string. Related to code-challenge given in par request. Must be present if client 'code-challenge-required' is true or if not using JWT authentication</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">client_assertion_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>client_assertion_type</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">client_assertion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>client_assertion</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valid signed JWT</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redirect_uri</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">URL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be identical to the parameter value that was included in the initial Authorization Request</p></td>
@@ -806,27 +804,27 @@ The ID token is a signed JWT that contains token claims, including the requested
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">access_token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>access_token</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique random string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">An opaque random string</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scope</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Requested scopes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Scope values as requested</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">expires_in</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expires_in</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Expiration time in seconds</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id_token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id_token</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JWT</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A serialized and signed JWT, including end-user claims requested in scope</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">token_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>token_type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bearer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Access token Type</p></td>
 </tr>
@@ -870,116 +868,117 @@ Pragma: no-cache
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">sub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sub</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Pairwise subject unique identifier</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">amr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>amr</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Methods References</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">iss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iss</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Issuer URL. Issuer identifier for the issuer of the response</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">response_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response_type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authentication flow requested response type used</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">age_comparator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age_comparator</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Age comparison value from request (required if was provided in request)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge_method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code_challenge_method</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Code challenge method - S256 or PLAIN</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">nonce</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nonce</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String value. Used to associate a Client session with an ID Token, and to mitigate replay attacks</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">client_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>client_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP id associated with the authentication flow</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">aud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aud</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Audience that this ID Token is intended for. Contains the Relying Party ID as an audience value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">acr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acr</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Context Class Reference</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ui_locales</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ui_locales</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authentication Context Class Reference</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">scope</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scope</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP-requested scope</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">acr_values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acr_values</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">acr_values value from request</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">attribues.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>attribues.*</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Key-value map of end-user info claims as requested by RP in scope</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">redirect_uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redirect_uri</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP-provided redirect url</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">state</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RP-provided state value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">exp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exp</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Expiration time on or after which the ID Token MUST NOT be accepted for processing</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">iat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iat</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Time at which the JWT was issued</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">code_challenge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code_challenge</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Code challenge associated with the authorization code</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jti</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jti</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A unique identifier for the token, which can be used to prevent reuse of the token</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_error_tracing"><a class="anchor" href="#_error_tracing"></a>Error Tracing</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_error_tracing"><a class="anchor" href="#_error_tracing"></a>Error Tracing</h3>
-<div class="paragraph">
-<p><strong>/par endpoint</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>/par response errors</strong></p>
-</div>
+<h3 id="_par_endpoint"><a class="anchor" href="#_par_endpoint"></a>/par endpoint</h3>
+<div class="sect3">
+<h4 id="_par_response_errors"><a class="anchor" href="#_par_response_errors"></a>/par response errors</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1021,9 +1020,9 @@ Pragma: no-cache
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/par - request validation errors</strong></p>
 </div>
+<div class="sect3">
+<h4 id="_par_request_validation_errors"><a class="anchor" href="#_par_request_validation_errors"></a>/par - request validation errors</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 16.6666%;">
@@ -1144,12 +1143,12 @@ Pragma: no-cache
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/authorize endpoint</strong></p>
 </div>
-<div class="paragraph">
-<p><strong>/authorize response errors</strong></p>
 </div>
+<div class="sect2">
+<h3 id="_authorize_endpoint"><a class="anchor" href="#_authorize_endpoint"></a>/authorize endpoint</h3>
+<div class="sect3">
+<h4 id="_authorize_response_errors"><a class="anchor" href="#_authorize_response_errors"></a>/authorize response errors</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1176,9 +1175,9 @@ Pragma: no-cache
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/authorize - standard flow</strong></p>
 </div>
+<div class="sect3">
+<h4 id="_authorize_standard_flow"><a class="anchor" href="#_authorize_standard_flow"></a>/authorize - standard flow</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 16.6666%;">
@@ -1299,9 +1298,9 @@ Pragma: no-cache
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/authorize - JWT flow</strong></p>
 </div>
+<div class="sect3">
+<h4 id="_authorize_jwt_flow"><a class="anchor" href="#_authorize_jwt_flow"></a>/authorize - JWT flow</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 16.6666%;">
@@ -1560,12 +1559,12 @@ Pragma: no-cache
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/token endpoint</strong></p>
 </div>
-<div class="paragraph">
-<p><strong>/token - JWT flow</strong></p>
 </div>
+<div class="sect2">
+<h3 id="_token_endpoint"><a class="anchor" href="#_token_endpoint"></a>/token endpoint</h3>
+<div class="sect3">
+<h4 id="_token_jwt_flo"><a class="anchor" href="#_token_jwt_flo"></a>/token - JWT flo</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1704,9 +1703,9 @@ or is otherwise malformed.</p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><strong>/token - basic authentication flow</strong></p>
 </div>
+<div class="sect3">
+<h4 id="_token_basic_authentication_flow"><a class="anchor" href="#_token_basic_authentication_flow"></a>/token - basic authentication flow</h4>
 <table class="tableblock frame-all grid-none stripes-odd stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1805,6 +1804,7 @@ or is otherwise malformed.</p></td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
