@@ -22,20 +22,7 @@ Try out the Authentigate flow and user experience directly in your browser — n
 ... **bank321** – test authentication (e.g., for logging in)
 . Choose an authentication method:
 .. https://github.com/SK-EID/smart-id-documentation/wiki/Environment-technical-parameters#test-accounts-for-automated-testing[Smart-ID Demo Accounts]
-+
-.Example
-[,text,subs="verbatim"]
-----
-     Personal number (Lithuania): `50001029996`
-----
 .. https://github.com/SK-EID/MID/wiki/Test-number-for-automated-testing-in-DEMO[Mobile-ID Demo Accounts]
-+
-.Example
-[,text,subs="verbatim"]
-----
-     Mobile: `+37200000766`  
-     Personal number: `60001019906`
-----
 . Start the authentication process. When the verification code appears, wait a few seconds — after successful authentication, you’ll be redirected to the demo client page.
 
 [TIP]
@@ -63,7 +50,14 @@ If you want to test how Authentigate works within your own system setup, we supp
 * https://github.com/SK-EID/MID/wiki/Test-number-for-automated-testing-in-DEMO[Mobile-ID Test Accounts]
 * Full list of https://github.com/SK-EID/authentigate-documentation/wiki/Environment-technical-parameters[Demo Environment Technical Parameters]
 
-[TIP]
+.NOTE
+[NOTE]
 ====
-You can also https://github.com/SK-EID/smart-id-documentation/wiki/Smart-ID-demo#getting-started[create your own Smart-ID demo account].
+You can also https://github.com/SK-EID/smart-id-documentation/wiki/Smart-ID-demo#getting-started[create your own Smart-ID demo account]
+====
+
+.IMPORTANT
+[IMPORTANT]
+====
+Smart-ID Basic (NQ) accounts do not function with Authentigate, so please use Smart-ID Qualified (Q) accounts for testing.
 ====
