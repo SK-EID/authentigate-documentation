@@ -1,0 +1,20 @@
+= Welcome
+
+image::logo.svg[Static,400,title="For developers, demos and testing",caption=""]
+
+Authentigate is a secure, standards-based gateway that allows e-services to request and receive verified personal data from users in a simple, privacy-respecting, and reliable way.
+
+By connecting to trusted eID authentication methods like Smart-ID, Mobile-ID, and ID-card, Authentigate ensures that all user data is verified at the source and can be safely used for identity-dependent services, eligibility checks, and regulatory compliance.
+
+E-services can integrate Authentigate to:
+
+. Authenticate users with strong, legally recognized eID solutions
+. Access verified attributes such as name, age, date of birth, and personal code
+. Implement age-based access controls (e.g. “over 18”)
+. Comply with legal and sector-specific requirements
+. Authentigate is designed to be easy to integrate, secure by design and scalable to meet the needs of both public and private sector service providers across multiple countries.
+
+== Try out
+If you are here to get full experience how Authentigate works, then try it out by starting xref:demo.adoc[here]
+
+include::implementation.adoc[leveloffset=+1]

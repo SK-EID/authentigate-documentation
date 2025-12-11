@@ -1,0 +1,7 @@
+{
+  "name": "asciidoctor-openblock",
+  "version": "1.0.0",
+  "description": "Asciidoctor (js) extension to make it possible to have nested openblocks",
+  "main": "index.js",
+  "author": "Cybernetica AS"
+}

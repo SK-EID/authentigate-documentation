@@ -1,0 +1,15 @@
+
+= Contact
+
+
+To integrate with the live environment, follow these steps::
+. Request access via our https://portal.skidsolutions.eu/order/authentication-signing?tab=authentigate[e-Service Portal] +
+. Choose a suitable pricing plan based on your usage and business needs. +
+. Provide your live environment details in the order form.
+See section 2. Client Registration in the Authentigate documentation for required parameters. +
+. Sign the agreement to proceed. +
+. Once your access is configured, we’ll contact you with confirmation and next steps. +
+
+In case of technical questions or errors::
+e-mail: support@skidsolutions.eu
+

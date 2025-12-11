@@ -1,0 +1,30 @@
+= Environments
+
+== LIVE
+
+[cols="1,3"]
+[options="header", stripes=odd, grid=none, frame=none]
+|===
+| Parameter | Value  
+| Base URL | https://id.authentigate.eu
+| DNS name | id.authentigate.eu
+| IP address | 91.223.243.17
+| Discovery Endpoint | https://id.authentigate.eu/.well-known/openid-configuration
+|===
+
+
+[IMPORTANT]
+
+Add Authentigate to your e-service! xref:contact.adoc[Order now]
+
+
+
+== DEMO
+
+[cols="1,3"]
+[options="header", stripes=odd, grid=none, frame=none]
+|===
+|  Parameter | Value  
+|  Base URL | https://oidc.demo.sk.ee/
+| Discovery Endpoint | https://oidc.demo.sk.ee/.well-known/openid-configuration
+|===

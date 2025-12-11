@@ -1,0 +1,27 @@
+name: Build docs and Deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+      - docs
+permissions:
+  contents: write
+defaults:
+  run:
+    working-directory: docs
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+
+      - run: npm install
+      - run: npx antora --fetch antora-playbook.yml --stacktrace
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs/build/site
+          target-folder: ./

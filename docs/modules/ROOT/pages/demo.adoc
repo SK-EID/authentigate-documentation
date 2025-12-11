@@ -1,0 +1,63 @@
+= Testing
+
+Authentigate offers two options for testing in the demo environment:
+
+. Explore the user experience (UX/UI)
+. Integrate your system for technical testing
+
+
+== Option 1: View UX and UI in Demo Environment
+
+Try out the Authentigate flow and user experience directly in your browser — no registration needed.
+
+=== How to Try It
+
+. Open the demo client page: https://oidc.demo.sk.ee/sample-rp/
+. Set the parameters on the demo page:
+.. **Scope** – select which attributes to request
+.. **Age comparator** – used when `age_over` or `age_under` are selected
+.. **Language** – choose your preferred language
+.. **Demo client** – select the client setup to simulate:
+... **alco123** – test age verification (e.g., for alcohol purchase)
+... **bank321** – test authentication (e.g., for logging in)
+. Choose an authentication method:
+.. https://github.com/SK-EID/smart-id-documentation/wiki/Environment-technical-parameters#test-accounts-for-automated-testing[Smart-ID Demo Accounts]
+.. https://github.com/SK-EID/MID/wiki/Test-number-for-automated-testing-in-DEMO[Mobile-ID Demo Accounts]
+. Start the authentication process. When the verification code appears, wait a few seconds — after successful authentication, you’ll be redirected to the demo client page.
+
+[TIP]
+====
+You can also https://github.com/SK-EID/smart-id-documentation/wiki/Smart-ID-demo#getting-started[create your own Smart-ID demo account] if needed.
+====
+
+== Option 2: Test Integration with Demo Environment
+
+If you want to test how Authentigate works within your own system setup, we support demo integrations **without needing a signed contract**.
+
+=== Steps to Get Started
+
+. Request demo access via our https://portal.skidsolutions.eu/order/authentication-signing?tab=authentigate[e-Service Portal]
+. Select the **"Demo Plan"** (free of charge).
+. In the order form, include your test environment details.  
+   See section xref:api:registration.adoc[Client Registration] in the Authentigate documentation.
+. Once your access is configured, you’ll receive a confirmation.
+. Set up the integration between your test system and our demo environment.
+. Start testing using section xref:api:index.adoc[API Specifications].
+
+=== Demo Accounts and Technical Parameters
+
+* https://github.com/SK-EID/smart-id-documentation/wiki/Environment-technical-parameters#test-accounts-for-automated-testing[Smart-ID Test Accounts]
+* https://github.com/SK-EID/MID/wiki/Test-number-for-automated-testing-in-DEMO[Mobile-ID Test Accounts]
+* Full list of https://github.com/SK-EID/authentigate-documentation/wiki/Environment-technical-parameters[Demo Environment Technical Parameters]
+
+.NOTE
+[NOTE]
+====
+You can also https://github.com/SK-EID/smart-id-documentation/wiki/Smart-ID-demo#getting-started[create your own Smart-ID demo account]
+====
+
+.IMPORTANT
+[IMPORTANT]
+====
+Smart-ID Basic (NQ) accounts do not function with Authentigate, so please use Smart-ID Qualified (Q) accounts for testing.
+====

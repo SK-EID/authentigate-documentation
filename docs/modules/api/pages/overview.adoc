@@ -1,0 +1,82 @@
+= Overview
+
+== What is Authentigate?
+
+**Authentigate** is a secure gateway that enables e-services to **easily request and receive verified personal data** about users, based on strong identity verification methods.
+
+---
+
+== What Verified Data Can Be Requested?
+
+Authentigate allows e-services to request the following **user attributes**:
+
+[cols="1,3,1", options="header", stripes=odd, grid=none, frame=none]
+|===
+| Attribute       | Description                                                                 | Example
+| `given_name`    | Given name(s) (first names)                                                 | `John`
+| `family_name`   | Family name (surname)                                                       | `Smith`
+| `name`          | Full name (given name + family name)                                        | `John Smith`
+| `birthdate`     | Date of birth                                                               | `23.04.1982`
+| `personal_code` | Personal ID number                                                          | `38204232745`
+| `age`           | Age in full years                                                           | `34`
+| `age_over`      | Whether user is over a specific age (requires `age_comparator` parameter)   | `yes` or `no`
+| `age_under`     | Whether user is under a specific age (requires `age_comparator` parameter)  | `yes` or `no`
+|===
+
+.Example
+[,text,subs="verbatim"]
+----
+if `age_comparator = 18`, then `age_under = yes` for users 17 or younger.
+----
+
+== How Is the Data Verified?
+
+* Authentigate verifies the **identity of the user** using supported national eID solutions.
+* Data is retrieved from **reliable and authentic sources**, such as **digital certificates** issued by trusted parties.
+
+== Supported Identity Verification Methods
+
+[cols="1,^1,^1,^1", options="header", stripes=odd, grid=none, frame=none]
+|===
+| Country   | Smart-ID | Mobile-ID | ID-Card
+| Estonia   | ✅ | ✅ | ✅  
+| Latvia    | ✅ |    |        
+| Lithuania | ✅ | ✅ |        
+| Belgium   | ✅ |    |       
+|===
+
+== Where Can I Try or Integrate Authentigate?
+
+Try the Demo::
+See how the user flow works here: xref:ROOT:ROOT:demo.adoc[Testing in Demo]
+
+Integrate with Production::  
+Step-by-step instructions: xref:ROOT:ROOT:contact.adoc[Access to Production]
+
+== Authentication Methods
+
+Smart-ID::
+* App-based strong authentication solution.
+* Available in Estonia, Latvia, Lithuania, and Belgium.
+* Suitable for both personal and organizational use.  
+https://sk-eid.github.io/smart-id-documentation[More about Smart-ID]
+
+[TIP]
+====
+**Upcoming:** In **Q4 2025**, Smart-ID integration will be updated to the latest API version.
+====
+
+Mobile-ID::
+* SIM card-based strong authentication.
+* Available in Estonia and Lithuania.  
+https://github.com/SK-EID/MID/wiki[More about Mobile-ID]
+
+ID-card (Estonia)::
+* Physical ID card used with a smart card reader.
+* Mandatory for Estonian citizens and EU residents in Estonia.  
+https://e-estonia.com/solutions/e-identity/id-card/[More about ID-card]
+
+== Need More Details?
+
+* Full API documentation: xref:api:index.adoc[Authentigate API Spec]
+* Environment parameters: xref:ROOT:ROOT:environments.adoc[Demo & Live Config]

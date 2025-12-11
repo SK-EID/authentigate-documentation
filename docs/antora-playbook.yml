@@ -1,0 +1,19 @@
+site:
+  title: Authentigate documentation
+  url: https://sk-eid.github.io/authentigate-documentation/
+  start_page: ROOT::index.adoc
+content:
+  sources:
+  - url: ./../
+    branches: HEAD
+    start_path: docs
+ui:
+  bundle:
+    url: ./ui/ui-bundle.zip
+  supplemental_files: ./ui/supplemental-ui
+antora:
+  extensions:
+  - '@antora/lunr-extension'
+asciidoc:
+  extensions:
+    - asciidoctor-openblock
