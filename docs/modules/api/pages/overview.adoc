@@ -12,15 +12,16 @@ Authentigate allows e-services to request the following **user attributes**:
 
 [cols="1,3,1", options="header", stripes=odd, grid=none, frame=none]
 |===
-| Attribute       | Description                                                                 | Example
-| `given_name`    | Given name(s) (first names)                                                 | `John`
-| `family_name`   | Family name (surname)                                                       | `Smith`
-| `name`          | Full name (given name + family name)                                        | `John Smith`
-| `birthdate`     | Date of birth                                                               | `23.04.1982`
-| `personal_code` | Personal ID number                                                          | `38204232745`
-| `age`           | Age in full years                                                           | `34`
-| `age_over`      | Whether user is over a specific age (requires `age_comparator` parameter)   | `yes` or `no`
-| `age_under`     | Whether user is under a specific age (requires `age_comparator` parameter)  | `yes` or `no`
+| Attribute               | Description                                                                 | Example
+| `personal_code`         | Personal ID number                                                          | `38204232745`
+| `personal_code_country` | Country issued personal code                                                | `LV`
+| `given_name`            | Given name(s) (first names)                                                 | `John`
+| `family_name`           | Family name (surname)                                                       | `Smith`
+| `name`                  | Full name (given name + family name)                                        | `John Smith`
+| `birthdate`             | Date of birth                                                               | `23.04.1982`
+| `age`                   | Age in full years                                                           | `34`
+| `age_over`              | Whether user is over a specific age (requires `age_comparator` parameter)   | `yes` or `no`
+| `age_under`             | Whether user is under a specific age (requires `age_comparator` parameter)  | `yes` or `no`
 |===
 
 .Example
@@ -38,11 +39,11 @@ if `age_comparator = 18`, then `age_under = yes` for users 17 or younger.
 
 [cols="1,^1,^1,^1", options="header", stripes=odd, grid=none, frame=none]
 |===
-| Country   | Smart-ID | Mobile-ID | ID-Card
-| Estonia   | ✅ | ✅ | ✅  
-| Latvia    | ✅ |    |        
-| Lithuania | ✅ | ✅ |        
-| Belgium   | ✅ |    |       
+| Country   | Smart-ID | Mobile-ID | ID-Card | eParaksts 
+| Estonia   | ✅ | ✅ | ✅ |
+| Latvia    | ✅ |    |     | ✅    
+| Lithuania | ✅ | ✅ |    |    
+| Belgium   | ✅ |    |    |   
 |===
 
 == Where Can I Try or Integrate Authentigate?
@@ -63,7 +64,8 @@ https://sk-eid.github.io/smart-id-documentation[More about Smart-ID]
 
 [TIP]
 ====
-**Upcoming:** In **Q4 2025**, Smart-ID integration will be updated to the latest API version.
+**New:** Authentigate now supports Smart-ID+, including the new authentication flows: QR code and Web2App. 
+Smart-ID+ is optional and can be activated for your service upon request.
 ====
 
 Mobile-ID::
@@ -75,6 +77,12 @@ ID-card (Estonia)::
 * Physical ID card used with a smart card reader.
 * Mandatory for Estonian citizens and EU residents in Estonia.  
 https://e-estonia.com/solutions/e-identity/id-card/[More about ID-card]
+
+eParaksts mobile::
+* An official Latvian electronic identity solution that allows users to authenticate using the eParaksts mobile application.
+* The user is redirected to the eParaksts identity portal.
+* Upon successful authentication, the verified identity data is returned to Authentigate and the OIDC flow continues as usual.
+ https://www.eparaksts.lv/lv/Produkti/Privatpersonam/mid/apraksts[Mobe about eParaksts mobile]
 
 == Need More Details?
 
