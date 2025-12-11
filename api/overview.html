@@ -116,6 +116,16 @@
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>personal_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Personal ID number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>38204232745</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>personal_code_country</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Country issued personal code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LV</code></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>given_name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Given name(s) (first names)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>John</code></p></td>
@@ -134,11 +144,6 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthdate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Date of birth</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>23.04.1982</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>personal_code</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Personal ID number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>38204232745</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
@@ -200,21 +205,27 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Estonia</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eParaksts</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Estonia</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Latvia</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Latvia</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lithuania</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Lithuania</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-center valign-top"></td>
 <td class="tableblock halign-center valign-top"></td>
 </tr>
 <tr>
@@ -276,7 +287,8 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p><strong>Upcoming:</strong> In <strong>Q4 2025</strong>, Smart-ID integration will be updated to the latest API version.</p>
+<p><strong>New:</strong> Authentigate now supports Smart-ID+, including the new authentication flows: QR code and Web2App.
+Smart-ID+ is optional and can be activated for your service upon request.</p>
 </div>
 </td>
 </tr>
@@ -308,6 +320,23 @@
 <li>
 <p>Mandatory for Estonian citizens and EU residents in Estonia.
 <a href="https://e-estonia.com/solutions/e-identity/id-card/">More about ID-card</a></p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">eParaksts mobile</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An official Latvian electronic identity solution that allows users to authenticate using the eParaksts mobile application.</p>
+</li>
+<li>
+<p>The user is redirected to the eParaksts identity portal.</p>
+</li>
+<li>
+<p>Upon successful authentication, the verified identity data is returned to Authentigate and the OIDC flow continues as usual.
+<a href="https://www.eparaksts.lv/lv/Produkti/Privatpersonam/mid/apraksts">Mobe about eParaksts mobile</a></p>
 </li>
 </ul>
 </div>
