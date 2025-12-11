@@ -1,7 +1,8 @@
 = Specifications
-:page-role: -toc
+#:page-role: -toc
+:page-toclevels: 1
 
-**Glossary**
+== Glossary
 
 * Attribute - Any piece of information related to a person that can be optionally shared during an OIDC authentication transaction, providing additional user details. 
 * Authentigate - A service developed by SK to offer attribute storage, calculation and sharing functionalities, allowing for the secure and controlled exchange of user information during authentication.
@@ -27,36 +28,36 @@ Authentication Request parameters:
 [cols="<20%,^20%,<30%,<30%", options=header, stripes=odd, grid=none]
 |===
 | Parameter | Required | Value | Description
-| scope | Yes | Must contain 'openid'. Supported scopes can also be retrieved from /.well-known/openid-configuration <<note1,^[1]^>>| Static value required by OIDC core protocol and additional user information relying party needs. Values separated by spaces.
-| age_comparator | No +
+| `scope` | Yes | Must contain 'openid'. Supported scopes can also be retrieved from /.well-known/openid-configuration <<note1,^[1]^>>| Static value required by OIDC core protocol and additional user information relying party needs. Values separated by spaces.
+| `age_comparator` | No +
  (Yes, when scope includes `age_over` or `age_under`) | Integer | Specifies against which age should comparison be made
-| response_type  | Yes  | Must be 'code'  | The authorization code flow is used
-| client_id      | Yes  | Relying-party ID  | A pre-registered relying-party identifier
-| redirect_uri   | Yes +
+| `response_type`  | Yes  | Must be 'code'  | The authorization code flow is used
+| `client_id`      | Yes  | Relying-party ID  | A pre-registered relying-party identifier
+| `redirect_uri`   | Yes +
 (No, in case of signed request)  | Relying-party callback URL  | A pre-registered relying party callback URL
-| state          | Yes +
+| `state`          | Yes +
 (No, in case of signed request)   | Unique random string | RP generated opaque value used to maintain state between the request and the callback. Can be used to mitigate replay and CSRF attacks
-| nonce          | No   | Unique random string  | RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks 
-| ui_locales     | No   | Must be one of et, en, lv, lt (or multiple in order of importance, separated by spaces) | End-User's preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to 'en' if detection fails.
-| code_challenge | No +
+| `nonce`          | No   | Unique random string  | RP generated unique string. If provided, will be returned as a nonce claim in the id_token. Can be used to mitigate replay attacks 
+| `ui_locales`     | No   | Must be one of et, en, lv, lt (or multiple in order of importance, separated by spaces) | End-User's preferred language for authentication. Determines the language used on the login page. The first found match with supported values will be set as the app language. If not set (or none are supported), app tries to determine the UI language from browser data etc. and defaults to 'en' if detection fails.
+| `code_challenge` | No +
 (Yes, in case of basic authentication)   | Base64 encoded hash of a unique challenge. | Base64 encoded hash of a unique challenge. The code-challenge is created by SHA256 hashing the code_verifier and base64 URL encoding the resulting hash Base64UrlEncode(SHA256Hash(code_verifier)). You can view an example from https://tonyxu-io.github.io/pkce-generator/. +
 NB! Must be present if not using JWT authentication.
-| code_challenge_method | No +
+| `code_challenge_method` | No +
 (Yes, in case of basic authentication)  | Must be 'S256'. | The algorithm by which the challenge shall be verified on the server side. Must be present if client 'code-challenge-required' is true or if not using JWT authentication.
-| sid_confirmation +
-_message  | No | String with information for users for the SID authentication app | Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc). 
-| mid_confirmation +
-_message  | No | String with information for users for the MID authentication app | Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.
-| mid_confirmation +
-_message_format | No | Must be one of GSM-7, UCS-2  | Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( ´+€[]^&#124;{}\ +´) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž).
-| acr_values     | No | Space separated string containing one or more of the following values: `\http://eidas.europa.eu/LoA/high`, `\http://eidas.europa.eu/LoA/substantial`, `mid`, `mid_ee`, `mid_lt`, `sid`, `sid_ee`, `sid_lv`, `sid_lt`, `idcard`, `idcard_ee` | Optional value specifying authentication methods to be usable by the end-user. +
+| `sid_confirmation +
+_message`  | No | String with information for users for the SID authentication app | Free text (max length 200 characters) value shown to Smart-ID users in the app during code choice. This can be the name of your service or provide more detailed info about the current interaction (like users name or order number etc). 
+| `mid_confirmation +
+_message`  | No | String with information for users for the MID authentication app | Free text (max length 40 characters for 'GSM-7', 20 characters for 'UCS-2') value shown to Mobile-ID users before asking authentication PIN.
+| `mid_confirmation +
+_message_format` | No | Must be one of GSM-7, UCS-2  | Specifies which characters and how many can be used in 'mid_confirmation_message'. GSM-7 allows 'mid_confirmation_message' to contain up to 40 characters from standard GSM 7-bit alpabet including up to 5 characters from extension table ( ´+€[]^&#124;{}\ +´) . UCS-2 allows up to 20 characters from UCS-2 alpabet (this has all Cyrillic characters, ÕŠŽ šžõ and ĄČĘĖĮŠŲŪŽ ąčęėįšųūž).
+| `acr_values`     | No | Space separated string containing one or more of the following values: `\http://eidas.europa.eu/LoA/high`, `\http://eidas.europa.eu/LoA/substantial`, `mid`, `mid_ee`, `mid_lt`, `sid`, `sid_ee`, `sid_lv`, `sid_lt`, `idcard`, `idcard_ee`, `eparaksts` | Optional value specifying authentication methods to be usable by the end-user. +
 Order of provided values affects the presentation of authentication options to the end-user. Acr values that appear earlier will be prioritized. Example order: +
 `mid_lt mid_ee sid_lv sid_lt sid_ee` - LT (MID, SID), EE (SID, MID), LV (SID). Please note that requesting authentication methods with LoA 'substantial' is supported but would result in error as all currently available authentication methods are recognized as 'high'.
-| request        | No +
+| `request`        | No +
 (Yes, if RP wishes to pass request parameters in JWT) | Request parameters which the RP wishes to pass in a single, self-contained parameter | Parameter representing the request as a JWT whose Claims are the request parameters
 |===
 
-[[note1]]^1^ *Supported scope values for requesting end-user attributes are as follows:*
+[[note1]]^1^ _Supported scope values for requesting end-user attributes are as follows:_
 
 [cols="1,3", options=header, stripes=odd, grid=none]
 |===
@@ -66,8 +67,8 @@ Order of provided values affects the presentation of authentication options to t
 | `birthdate` | Date of birth
 | `\https://id.authentigate.eu/claims/name` | Full name
 |	`\https://id.authentigate.eu/claims/personal_code` | Personal identification code
-| `\https://id.authentigate.eu/claims/eid_issuing_country` | Country code that has issued the personal identification code
-| `\https://id.authentigate.eu/claims/age` | Actual age
+| `\https://id.authentigate.eu/claims/personal_code_country` | Country code that has issued the personal identification code
+| `\https://id.authentigate.eu/claims/age` | Actual age in completed years
 | `\https://id.authentigate.eu/claims/age_under` | Verification of end-user being under certain age - if requested in scope, the parameter `age_comparator` must be provided in request
 | `\https://id.authentigate.eu/claims/age_over` |  Verification of end-user being over certain age - if requested in scope, the parameter `age_comparator` must be provided in request
 |===
@@ -242,9 +243,9 @@ Successful Response parameters:
 [cols="1,^1,2,4", options=header, stripes=odd, grid=none]
 |===
 | Parameter    | Required | Value                | Description
-| code         | Yes      | unique random string | A single-use, client-bound, short-lived authorization code, that can be used at OIDC token endpoint to redeem the id-token.
-| state        | Yes      | unique random string | RP's state parameter value specified in the Authorization Request
-| redirect_uri | Yes      | URL                  | RP's redirect_uri specified in the Authorization Request 
+| `code`         | Yes      | unique random string | A single-use, client-bound, short-lived authorization code, that can be used at OIDC token endpoint to redeem the id-token.
+| `state`        | Yes      | unique random string | RP's state parameter value specified in the Authorization Request
+| `redirect_uri` | Yes      | URL                  | RP's redirect_uri specified in the Authorization Request 
 |===
 
 .*HTTP 302 response example:*
@@ -275,12 +276,12 @@ Token request parameters:
 [cols="1,^1,1,4", options=header, stripes=odd, grid=none]
 |===
 | Parameter | Required | Value | Description
-| grant_type | Yes | Must be `authorization_code` | Static value required by the OIDC core protocol
-| code | Yes | Unique random string | Authorization code value returned from the OIDC-service
-| code_verifier | No | Unique random string | High-entropy cryptographic random string. Related to code-challenge given in par request. Must be present if client 'code-challenge-required' is true or if not using JWT authentication
-| client_assertion_type | No | If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer' | Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present
-| client_assertion | No | Valid signed JWT | Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present
-| redirect_uri | Yes | URL | Must be identical to the parameter value that was included in the initial Authorization Request
+| `grant_type` | Yes | Must be `authorization_code` | Static value required by the OIDC core protocol
+| `code` | Yes | Unique random string | Authorization code value returned from the OIDC-service
+| `code_verifier` | No | Unique random string | High-entropy cryptographic random string. Related to code-challenge given in par request. Must be present if client 'code-challenge-required' is true or if not using JWT authentication
+| `client_assertion_type` | No | If present, must be 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer' | Static value required by the OIDC core protocol. Must be present only if 'client_assertion' field is also present
+| `client_assertion` | No | Valid signed JWT | Must contain a single valid JSON Web Token. Must be present only if 'client_assertion_type' field is also present
+| `redirect_uri` | Yes | URL | Must be identical to the parameter value that was included in the initial Authorization Request
 |===
 
 When passing token request in a signed JWT, the JWT own claims are:
@@ -362,11 +363,11 @@ Token response parameters:
 [cols="1,1,4", options=header, stripes=odd, grid=none]
 |===
 | Parameter    | Value                | Description
-| access_token | Unique random string | An opaque random string
-| scope        | Requested scopes     | Scope values as requested
-| expires_in   | Expiration time in seconds | 
-| id_token     | JWT                  | A serialized and signed JWT, including end-user claims requested in scope
-| token_type   | `Bearer`             | Access token Type
+| `access_token` | Unique random string | An opaque random string
+| `scope`        | Requested scopes     | Scope values as requested
+| `expires_in`   | Expiration time in seconds | 
+| `id_token`     | JWT                  | A serialized and signed JWT, including end-user claims requested in scope
+| `token_type`   | `Bearer`             | Access token Type
 |===
 
 .*Token success response example:*
@@ -391,33 +392,31 @@ Decoded ID-token claims:
 [cols="2,1,4", options=header, stripes=odd, grid=none]
 |===
 | Claim            | Required in token | Description
-| sub              | Yes | Pairwise subject unique identifier
-| amr              | Yes | Authentication Methods References
-| iss              | Yes | Issuer URL. Issuer identifier for the issuer of the response
-| response_type    | Yes | Authentication flow requested response type used
-| age_comparator   | No | Age comparison value from request (required if was provided in request)
-| code_challenge_method | No | Code challenge method - S256 or PLAIN
-| nonce            | No | String value. Used to associate a Client session with an ID Token, and to mitigate replay attacks
-| client_id        | Yes | RP id associated with the authentication flow
-| aud              | Yes | Audience that this ID Token is intended for. Contains the Relying Party ID as an audience value
-| acr              | Yes | Authentication Context Class Reference
-| ui_locales       | No | Authentication Context Class Reference
-| scope            | Yes | RP-requested scope
-| acr_values       | Yes | acr_values value from request
-| attribues.*      | Yes | Key-value map of end-user info claims as requested by RP in scope
-| redirect_uri     | Yes | RP-provided redirect url
-| state            | Yes | RP-provided state value
-| exp              | Yes | Expiration time on or after which the ID Token MUST NOT be accepted for processing
-| iat              | Yes | Time at which the JWT was issued
-| code_challenge   | No | Code challenge associated with the authorization code
-| jti              | Yes | A unique identifier for the token, which can be used to prevent reuse of the token
+| `sub`              | Yes | Pairwise subject unique identifier
+| `amr`              | Yes | Authentication Methods References
+| `iss`              | Yes | Issuer URL. Issuer identifier for the issuer of the response
+| `response_type`    | Yes | Authentication flow requested response type used
+| `age_comparator`   | No | Age comparison value from request (required if was provided in request)
+| `code_challenge_method` | No | Code challenge method - S256 or PLAIN
+| `nonce`            | No | String value. Used to associate a Client session with an ID Token, and to mitigate replay attacks
+| `client_id`        | Yes | RP id associated with the authentication flow
+| `aud`              | Yes | Audience that this ID Token is intended for. Contains the Relying Party ID as an audience value
+| `acr`              | Yes | Authentication Context Class Reference
+| `ui_locales`       | No | Authentication Context Class Reference
+| `scope`            | Yes | RP-requested scope
+| `acr_values`       | Yes | acr_values value from request
+| `attribues.*`      | Yes | Key-value map of end-user info claims as requested by RP in scope
+| `redirect_uri`     | Yes | RP-provided redirect url
+| `state`            | Yes | RP-provided state value
+| `exp`              | Yes | Expiration time on or after which the ID Token MUST NOT be accepted for processing
+| `iat`              | Yes | Time at which the JWT was issued
+| `code_challenge`   | No | Code challenge associated with the authorization code
+| `jti`              | Yes | A unique identifier for the token, which can be used to prevent reuse of the token
 |===
 
-=== Error Tracing
-
-**/par endpoint**
-
-*/par response errors*
+== Error Tracing
+=== /par endpoint
+==== /par response errors
 
 [cols="1,1,3", options=header, stripes=odd, grid=none]
 |===
@@ -429,7 +428,7 @@ Decoded ID-token claims:
 | 500              | server_error      | The authorization server encountered an unexpected condition that prevented it from fulfilling the request
 |===
 
-*/par - request validation errors*
+==== /par - request validation errors
 
 [cols="1,1,3,1", options=header, stripes=odd, grid=none]
 |===
@@ -453,9 +452,9 @@ Decoded ID-token claims:
 | 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |
 |===
 
-**/authorize endpoint**
+=== /authorize endpoint
 
-*/authorize response errors*
+==== /authorize response errors
 
 [cols="1,1,3", options=header, stripes=odd, grid=none]
 |===
@@ -464,7 +463,7 @@ Decoded ID-token claims:
 | 400               | user_cancel       | User canceled authentication
 |===
 
-*/authorize - standard flow*
+==== /authorize - standard flow
 
 [cols="1,1,3,1", options=header, stripes=odd, grid=none]
 |===
@@ -488,7 +487,7 @@ Decoded ID-token claims:
 | 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |
 |===
 
-*/authorize - JWT flow*
+==== /authorize - JWT flow
 
 [cols="1,1,3,1", options=header, stripes=odd, grid=none]
 |===
@@ -535,10 +534,9 @@ Decoded ID-token claims:
 | 401              | invalid_client            | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).   |
 |===
 
-**/token endpoint**
-  
+=== /token endpoint
 
-*/token - JWT flow*  
+==== /token - JWT flo  
 
 [cols="1,1,3", options=header, stripes=odd, grid=none]
 |===
@@ -571,7 +569,7 @@ or is otherwise malformed.
 | 401              | invalid_client         | Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).                                                                                                                                        
 |===
 
-*/token - basic authentication flow*
+==== /token - basic authentication flow
 
 [cols="1,1,3", options=header, stripes=odd, grid=none]
 |===
