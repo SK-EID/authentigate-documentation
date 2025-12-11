@@ -2,6 +2,7 @@ name: Build docs and Deploy to GitHub Pages
 on:
   push:
     branches:
+      - main
       - docs
 permissions:
   contents: write
